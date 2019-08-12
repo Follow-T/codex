@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.asiainfo.config.mapper.AuHallMapper">
+    
+    <resultMap type="AuHall" id="AuHallsList">
+        <result property="id"    column="id_"    />
+        <result property="code"    column="code_"    />
+        <result property="name"    column="name_"    />       
+        <collection property="auHallBankSignT" ofType="com.asiainfo.config.domain.AuHallBankSignT" autoMapping="true">
+        	<id property="id"    column="id_" ></id>
+            <result property="accountno" column="accountno_"></result>
+            <result property="companyaccountname"   column="companyaccountname_"></result>
+            <result property="useraccountno"    column="useraccountno_"></result>       
+        </collection>
+    </resultMap>
+    <select id="selectAuHallsList" resultMap="AuHallsList">
+    	select a.id_,a.code_,a.name_,t.accountno_,t.companyaccountname_,t.useraccountno_,t.id_
+    	from au_hall a 
+    		left join au_hall_bank_sign_t t on a.id_=t.id_
+    </select>
+	
+
+    
+</mapper>

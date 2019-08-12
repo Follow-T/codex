@@ -1,0 +1,430 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.asiainfo.audit.mapper.AuditReceivablesMapper">
+
+    <select id="selectReceivableList"  parameterType="map" resultType="map">
+        select
+        ys.hallid_,
+        t.name_ as hall_type_name,
+        h.code_,
+        h.name_,
+        h.orgid_,
+        g.name_ as org_name,
+        ys.businessdate_,
+        ys.amount_,
+        ys.incomeamount_,
+        ys.backamount_,
+        ys.auditstate_,
+        f.dict_label auditstate_cn
+        from
+        (select x.businessdate_,x.hallid_,sum(x.amount_) amount_,sum(x.incomeamount_) incomeamount_,sum(x.backamount_)  backamount_,auditstate_ from (
+        select a.hallid_,IFNULL(a.amount_,0) amount_,IFNULL(a.incomeamount_,0) incomeamount_,IFNULL(a.backamount_,0) backamount_,a.businessdate_,auditstate_
+        from AU_RCB_BOSS_IN a
+        union all
+        select B.hallid_,IFNULL(B.amount_,0) amount_,IFNULL(B.incomeamount_,0) incomeamount_,IFNULL(B.cancelamount_,0) cancelamount_,B.businessdate_,auditstate_
+        from AU_RCB_BOSS_OUT B) x
+        group by  x.businessdate_,x.hallid_,x.auditstate_) ys
+        left outer join AU_HALL h on  ys.hallid_=h.id_
+        left outer join AU_ORG g on h.orgid_=g.id_
+        left outer join AU_DIM_HALL_TYPE t on h.halltypeid_=t.id_
+        left outer join sys_dict_data f on f.dict_type='audit_checke_status' and f.dict_value=ys.auditstate_
+        <where>
+            <if test="dtCode != null  and dtCode != '' "> and h.code_ like CONCAT('%',#{dtCode},'%')</if>
+            <if test="dtName != null  and dtName != '' "> and h.name_ like CONCAT('%',#{dtName},'%')</if>
+            <if test="status != null"> and ys.auditstate_ = #{status}</if>
+            <if test="orgId != null"> and h.orgid_ = #{orgId}</if>
+            <if test="beginTime != null and beginTime != ''">
+                AND date_format(ys.businessdate_,'%y%m%d') &gt;= date_format(#{beginTime},'%y%m%d')
+            </if>
+            <if test="endTime != null and endTime != ''">
+                AND date_format(ys.businessdate_,'%y%m%d') &lt;= date_format(#{endTime},'%y%m%d')
+            </if>
+        </where>
+    </select>
+
+     <select id="selectReceivableById" parameterType="map" resultType="map">
+        SELECT
+            ys.hallid_,
+            t.name_ AS hall_type_name,
+            h.code_,
+            h.name_,
+            h.orgid_,
+            g.name_ AS org_name,
+            ys.businessdate_,
+            ys.amount_,
+            ys.incomeamount_,
+            ys.backamount_,
+            ys.auditstate_,
+            f.dict_label auditstate_cn
+        FROM
+            (
+                SELECT
+                    x.businessdate_,
+                    x.hallid_,
+                    sum(x.amount_) amount_,
+                    sum(x.incomeamount_) incomeamount_,
+                    sum(x.backamount_) backamount_,
+                    auditstate_
+                FROM
+                    (
+                        SELECT
+                            a.hallid_,
+                            IFNULL(a.amount_, 0) amount_,
+                            IFNULL(a.incomeamount_, 0) incomeamount_,
+                            IFNULL(a.backamount_, 0) backamount_,
+                            a.businessdate_,
+                            auditstate_
+                        FROM
+                            AU_RCB_BOSS_IN a
+                        UNION ALL
+                            SELECT
+                                B.hallid_,
+                                IFNULL(B.amount_, 0) amount_,
+                                IFNULL(B.incomeamount_, 0) incomeamount_,
+                                IFNULL(B.cancelamount_, 0) cancelamount_,
+                                B.businessdate_,
+                                auditstate_
+                            FROM
+                                AU_RCB_BOSS_OUT B
+                    ) x
+                GROUP BY
+                    x.businessdate_,
+                    x.hallid_,
+                    x.auditstate_
+            ) ys
+        LEFT OUTER JOIN AU_HALL h ON ys.hallid_ = h.id_
+        LEFT OUTER JOIN AU_ORG g ON h.orgid_ = g.id_
+        LEFT OUTER JOIN AU_DIM_HALL_TYPE t ON h.halltypeid_ = t.id_
+        LEFT OUTER JOIN sys_dict_data f ON f.dict_type = 'audit_checke_status'
+        AND f.dict_value = ys.auditstate_
+        where ys.hallid_=#{id}
+         AND date_format(ys.businessdate_,'%y%m%d') = date_format(#{yyDate},'%y%m%d')
+     </select>
+
+     <select id="selectYsSysByCnd" parameterType="map" resultType="map">
+         select a.* from(
+         SELECT
+         b.hallid_,
+         a.bossinid_ id,
+         a.itemname_,
+         a.itemid_,
+         a.amount_,
+         a.incomeamount_,
+         a.backamount_,
+         '系统内' AS data_src,
+         '系统内应收备注' AS notes,
+         b.businessdate_
+         FROM
+         AU_RCB_BOSS_IN_LINE a,
+         AU_RCB_BOSS_IN b
+         WHERE
+         a.bossinid_ = b.id_
+         AND b.hallid_=#{id}
+         AND date_format( businessdate_, '%y%m%d' ) = date_format(#{yyDate},'%y%m%d')
+         UNION ALL
+         SELECT
+         a.hallid_,
+         a.id_ id,
+         '手工登记系统外收入' as itemname_,
+         '' itemid_,
+         a.amount_,
+         a.incomeamount_,
+         a.cancelamount_,
+         '系统外' AS data_src,
+         '系统外应收备注' AS notes,
+         a.businessdate_
+         FROM
+         AU_RCB_BOSS_OUT a
+         WHERE a.hallid_ =#{id}
+         AND date_format( businessdate_, '%y%m%d' ) = date_format(#{yyDate},'%y%m%d')
+         )a
+         <where>
+             <if test="projId != null">
+                 a.itemid_=#{projId}
+             </if>
+         </where>
+
+   </select>
+
+    <select id="selectDtInfoByPage" parameterType="map" resultType="map">
+        select id_ dtCode,name_ dtName from AU_HALL
+        <where>
+            <if test="dtName != null  and dtName != '' ">
+                    id_ like CONCAT('%',#{dtName},'%')
+                 or name_ like CONCAT('%',#{dtName},'%')
+            </if>
+        </where>
+    </select>
+
+    <select id="findProjects" resultType="map">
+        select id_ code,name_ name from AU_BC_ITEM
+    </select>
+
+    <insert id="insertAuRcbBossOut"  parameterType="map" useGeneratedKeys="true" keyProperty="id">
+        insert into AU_RCB_BOSS_OUT
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null  ">id_,</if>
+            <if test="templetsid != null  ">templetsid_,</if>
+            <if test="dtCode != null  ">hallid_,</if>
+            <if test="yyDate != null  ">businessdate_,</if>
+            <if test="sumMoney != null  ">amount_,</if>
+            <if test="inSum != null  ">incomeamount_,</if>
+            <if test="outSum != null  ">cancelamount_,</if>
+            <if test="createBy != null  ">createby_,</if>
+            <if test="auditstate != null  and auditstate != ''  ">auditstate_,</if>
+            <if test="createTime != null  ">createtime_,</if>
+            <if test="lastupdateby != null  ">lastupdateby_,</if>
+            <if test="lastupdatetime != null  ">lastupdatetime_,</if>
+            <if test="enable != null  ">enable_,</if>
+            <if test="uploadfilename != null  and uploadfilename != ''  ">uploadfilename_,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null  ">#{id},</if>
+            <if test="templetsid != null  ">#{templetsid},</if>
+            <if test="dtCode != null  ">#{dtCode},</if>
+            <if test="yyDate != null  ">#{yyDate},</if>
+            <if test="sumMoney != null  ">#{sumMoney},</if>
+            <if test="inSum != null  ">#{inSum},</if>
+            <if test="outSum != null  ">#{outSum},</if>
+            <if test="createBy != null  ">#{createBy},</if>
+            <if test="auditstate != null  and auditstate != ''  ">#{auditstate},</if>
+            <if test="createTime != null ">#{createTime},</if>
+            <if test="lastupdateby != null  ">#{lastupdateby},</if>
+            <if test="lastupdatetime != null  ">#{lastupdatetime},</if>
+            <if test="enable != null  ">#{enable},</if>
+            <if test="uploadfilename != null  and uploadfilename != ''  ">#{uploadfilename},</if>
+        </trim>
+    </insert>
+
+    <update id="updateAuRcbBossOut"  parameterType="map">
+        update AU_RCB_BOSS_OUT
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="templetsid != null  ">templetsid_ = #{templetsid},</if>
+            <if test="dtCode != null  ">hallid_ = #{dtCode},</if>
+            <if test="yyDate != null  ">businessdate_ = #{yyDate},</if>
+            <if test="sumMoney != null  ">amount_ = #{sumMoney},</if>
+            <if test="inSum != null  ">incomeamount_ = #{inSum},</if>
+            <if test="outSum != null  ">cancelamount_ = #{outSum},</if>
+            <if test="auditstate != null  and auditstate != ''  ">auditstate_ = #{auditstate},</if>
+            <if test="lastupdateby != null  ">lastupdateby_ = #{lastupdateby},</if>
+            <if test="lastupdatetime != null  ">lastupdatetime_ = #{lastupdatetime},</if>
+            <if test="enable != null  ">enable_ = #{enable},</if>
+            <if test="uploadfilename != null  and uploadfilename != ''  ">uploadfilename_ = #{uploadfilename},</if>
+        </trim>
+        where id_ = #{id}
+    </update>
+
+    <insert id="insertAuRcbBossOutLineBatch" parameterType="java.util.List">
+        insert into AU_RCB_BOSS_OUT_LINE (bossoutid_, itemid_, amount_, incomeamount_, backamount_,
+        remark_,  enable_, paytype_,createby_, createtime_)
+        values
+        <foreach collection="list" item="item" index="index"
+                 separator=",">
+            (
+            #{item.bossoutid},
+            #{item.proId},
+            #{item.ysAmount},
+            #{item.incomeAmount},
+            #{item.backAmount},
+            #{item.remark},
+            #{item.enable},
+            #{item.paytype},
+            #{item.createBy},
+            #{item.createTime}
+            )
+        </foreach>
+    </insert>
+
+    <select id="selectDtRegisterCount" parameterType="map" resultType="int">
+          select count(1) c from AU_RCB_BOSS_OUT
+          where hallid_=#{dtCode}
+          and businessdate_=#{yyDate}
+    </select>
+
+    <!--删除手工登记的应收数据-->
+    <delete id="deleteYsDetailLineHand" parameterType="string">
+        delete from AU_RCB_BOSS_OUT_LINE where bossoutid_=#{id}
+    </delete>
+
+    <delete id="deleteYsDetailHand" parameterType="string">
+        delete from AU_RCB_BOSS_OUT where id_=#{id}
+    </delete>
+    
+    <select id="selectSysInProjMoneyList" parameterType="map" resultType="map">
+        SELECT
+        a.businessdate_,
+        b.code_ ,
+        b.name_,
+        <choose>
+            <when test="projId=='10000'.toString()">
+                a.rhhalluserid_ staff_id,
+            </when>
+            <when test="projId=='10001'.toString()">
+                a.crmhalluserid_ staff_id,
+            </when>
+            <when test="projId=='99999'.toString()">
+                a.dshalluserid_ staff_id,
+            </when>
+            <when test="projId=='10680'.toString()">
+                a.ljhhalluserid_ staff_id,
+            </when>
+        </choose>
+        c.name_ as staff_name,
+        a.itemname_,
+        a.amount_,
+        d.name_ as pay_type_name,
+        '18900000189' as mobile_no,
+        '10000000000110011' AS tradeno,
+        '10000000000110011' as order_no
+        FROM ${tableName} a,
+        AU_CHAN_HALL b,
+        AU_CHAN_HALL_USER c,
+        AU_BC_PAY_TYPE d
+        WHERE
+        <choose>
+            <when test="projId=='10000'.toString()">
+                a.rhhallid_=b.ID_
+            </when>
+            <when test="projId=='10001'.toString()">
+                a.crmhallid_=b.ID_
+            </when>
+            <when test="projId=='99999'.toString()">
+                a.dshallid_=b.ID_
+            </when>
+            <when test="projId=='10680'.toString()">
+                a.ljhhallid_=b.ID_
+            </when>
+        </choose>
+        <choose>
+            <when test="projId=='10000'.toString()">
+               and  a.rhhalluserid_=c.ID_
+            </when>
+            <when test="projId=='10001'.toString()">
+                and a.crmhalluserid_=c.ID_
+            </when>
+            <when test="projId=='99999'.toString()">
+                and a.dshalluserid_=c.ID_
+            </when>
+            <when test="projId=='10680'.toString()">
+                and a.ljhhalluserid_=c.ID_
+            </when>
+        </choose>
+        and a.paymethod_=d.id_
+        and DATE_FORMAT(a.businessdate_,'%y%m%d') = date_format(#{dateNo},'%y%m%d')
+        and a.hallid_=#{dtId}
+        <choose>
+            <when test="projId=='10000'.toString() and type=='1'.toString()">
+                and a.itemname_ in ('现金收讫',
+                '预存收讫',
+                '现费收入',
+                '托收转预存',
+                '余额提取回退',
+                '预存余额提取回退',
+                '资金在途确认',
+                '翼支付充值',
+                '翼支付托收充值',
+                '卫星收费',
+                '扫码支付收讫')
+            </when>
+            <when test="projId=='10000'.toString() and type=='2'.toString()">
+                and a.itemname_ in ('本金余额提取',
+                '取消往日收现',
+                '取消往日预存',
+                '取消今日收现',
+                '取消今日预存',
+                '返销现费收入',
+                '托收转预存返销',
+                '保证金退费',
+                '资金在途确认返销',
+                '翼支付撤销',
+                '翼支付托收充值撤销',
+                '卫星冲正',
+                '扫码支付冲正')
+            </when>
+            <when test="projId=='10001'.toString() and type=='1'.toString()">
+                and a.itemname_ in ('收入金额','mini厅营业净收入')
+            </when>
+            <when test="projId=='10001'.toString() and type=='2'.toString()">
+                and a.itemname_ in ('补退金额','mini厅补退金额')
+            </when>
+
+            <when test="projId=='99999'.toString() and type=='1'.toString()">
+            and a.itemname_ in ('现金收讫','预存收讫','现费收入','托收转预存','余额提取回退')
+        </when>
+            <when test="projId=='99999'.toString() and type=='2'.toString()">
+                and a.itemname_ in ('本金余额提取',
+                '取消往日收现','取消往日预存','取消今日收现','取消今日预存',
+                '返销现费收入','托收转预存返销')
+            </when>
+
+            <when test="projId=='10680'.toString() and type=='1'.toString()">
+                and a.itemname_ in ('')
+            </when>
+        </choose>
+            <if test="dtCode != null and  dtCode !='' ">
+                and (
+                     b.code_ like CONCAT('%',#{dtCode},'%')
+                or   b.name_ like  CONCAT('%',#{dtCode},'%')
+                )
+            </if>
+            <if test="yyygh != null and  yyygh !='' ">
+                <choose>
+                    <when test="projId=='10000'.toString()">
+                        and a.rhhalluserid_ like CONCAT('%',#{yyygh},'%')
+                    </when>
+                    <when test="projId=='10001'.toString()">
+                        and   a.crmhalluserid_ like CONCAT('%',#{yyygh},'%')
+                    </when>
+                    <when test="projId=='99999'.toString()">
+                        and a.dshalluserid_ like CONCAT('%',#{yyygh},'%')
+                    </when>
+                    <when test="projId=='10680'.toString()">
+                        and a.ljhhalluserid_ like CONCAT('%',#{yyygh},'%')
+                    </when>
+                </choose>
+            </if>
+    </select>
+
+    <select id="findYsHandInfoById" parameterType="string" resultType="map">
+        select
+        a.id_,
+        templetsid_,
+        hallid_,
+        businessdate_ businessdate,
+        IFNULL(amount_,0) amount,
+        incomeamount_,
+        cancelamount_,
+        a.createby_,
+        auditstate_,
+        a.createtime_,
+        a.enable_,
+        uploadfilename_,
+        IFNULL(b.name_,'') name
+        from AU_RCB_BOSS_OUT a,AU_HALL b
+        where a.hallid_=b.id_
+         and a.id_=#{id}
+    </select>
+
+    <select id="findYsHandProsInfoById" parameterType="string" resultType="map">
+        SELECT
+            a.id_ id,
+            bossoutid_ bossoutid,
+            itemid_ proId,
+            amount_ ysAmount,
+            incomeamount_ incomeAmount,
+            backamount_ backAmount,
+            a.remark_ remark,
+            a.enable_ enable_,
+            paytype_ paytype,
+            a.createby_,
+            a.createtime_,
+            b.name_ proName
+        FROM
+            AU_RCB_BOSS_OUT_LINE a left outer join AU_BC_ITEM b on a.itemid_ = b.id_
+        WHERE
+         a.bossoutid_ = #{id}
+    </select>
+
+</mapper>

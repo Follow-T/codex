@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.asiainfo.config.mapper.AuBcPayTypeMapper">
+    
+    <resultMap type="AuBcPayType" id="AuBcPayTypeResult">
+        <result property="id"    column="id_"    />
+        <result property="code"    column="code_"    />
+        <result property="name"    column="name_"    />
+        <result property="period"    column="period_"    />
+        <result property="remark"    column="remark_"    />
+        <result property="faceflag"    column="faceflag_"    />
+        <result property="createby"    column="createby_"    />
+        <result property="createtime"    column="createtime_"    />
+        <result property="lastupdateby"    column="lastupdateby_"    />
+        <result property="lastupdatetime"    column="lastupdatetime_"    />
+        <result property="enable"    column="enable_"    />
+    </resultMap>
+	
+	<sql id="selectAuBcPayTypeVo">
+        select id_, code_, name_, period_, remark_, faceflag_, createby_, createtime_, lastupdateby_, lastupdatetime_, enable_ from AU_BC_PAY_TYPE
+    </sql>
+	
+    <select id="selectAuBcPayTypeList" parameterType="AuBcPayType" resultMap="AuBcPayTypeResult">
+        <include refid="selectAuBcPayTypeVo"/>
+        <where>  
+            <if test="id != null "> and id_ = #{id}</if>
+             <if test="code != null  and code != '' "> and code_ = #{code}</if>
+             <if test="name != null  and name != '' "> and name_ = #{name}</if>
+             <if test="period != null "> and period_ = #{period}</if>
+             <if test="remark != null  and remark != '' "> and remark_ = #{remark}</if>
+             <if test="faceflag != null  and faceflag != '' "> and faceflag_ = #{faceflag}</if>
+             <if test="createby != null "> and createby_ = #{createby}</if>
+             <if test="createtime != null "> and createtime_ = #{createtime}</if>
+             <if test="lastupdateby != null "> and lastupdateby_ = #{lastupdateby}</if>
+             <if test="lastupdatetime != null "> and lastupdatetime_ = #{lastupdatetime}</if>
+             <if test="enable != null "> and enable_ = #{enable}</if>
+         </where>
+    </select>
+    
+    <select id="selectAuBcPayTypeById" parameterType="Long" resultMap="AuBcPayTypeResult">
+        <include refid="selectAuBcPayTypeVo"/>
+        where id_ = #{id}
+    </select>
+        
+    <insert id="insertAuBcPayType" parameterType="AuBcPayType">
+        insert into AU_BC_PAY_TYPE
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null  ">id_,</if>
+			<if test="code != null  and code != ''  ">code_,</if>
+			<if test="name != null  and name != ''  ">name_,</if>
+			<if test="period != null  ">period_,</if>
+			<if test="remark != null  and remark != ''  ">remark_,</if>
+			<if test="faceflag != null  and faceflag != ''  ">faceflag_,</if>
+			<if test="createby != null  ">createby_,</if>
+			<if test="createtime != null  ">createtime_,</if>
+			<if test="lastupdateby != null  ">lastupdateby_,</if>
+			<if test="lastupdatetime != null  ">lastupdatetime_,</if>
+			<if test="enable != null  ">enable_,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null  ">#{id},</if>
+			<if test="code != null  and code != ''  ">#{code},</if>
+			<if test="name != null  and name != ''  ">#{name},</if>
+			<if test="period != null  ">#{period},</if>
+			<if test="remark != null  and remark != ''  ">#{remark},</if>
+			<if test="faceflag != null  and faceflag != ''  ">#{faceflag},</if>
+			<if test="createby != null  ">#{createby},</if>
+			<if test="createtime != null  ">#{createtime},</if>
+			<if test="lastupdateby != null  ">#{lastupdateby},</if>
+			<if test="lastupdatetime != null  ">#{lastupdatetime},</if>
+			<if test="enable != null  ">#{enable},</if>
+         </trim>
+    </insert>
+	 
+    <update id="updateAuBcPayType" parameterType="AuBcPayType">
+        update AU_BC_PAY_TYPE
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="code != null  and code != ''  ">code_ = #{code},</if>
+            <if test="name != null  and name != ''  ">name_ = #{name},</if>
+            <if test="period != null  ">period_ = #{period},</if>
+            <if test="remark != null  and remark != ''  ">remark_ = #{remark},</if>
+            <if test="faceflag != null  and faceflag != ''  ">faceflag_ = #{faceflag},</if>
+            <if test="createby != null  ">createby_ = #{createby},</if>
+            <if test="createtime != null  ">createtime_ = #{createtime},</if>
+            <if test="lastupdateby != null  ">lastupdateby_ = #{lastupdateby},</if>
+            <if test="lastupdatetime != null  ">lastupdatetime_ = #{lastupdatetime},</if>
+            <if test="enable != null  ">enable_ = #{enable},</if>
+        </trim>
+        where id_ = #{id}
+    </update>
+
+	<delete id="deleteAuBcPayTypeById" parameterType="Long">
+        delete from AU_BC_PAY_TYPE where id_ = #{id}
+    </delete>
+	
+    <delete id="deleteAuBcPayTypeByIds" parameterType="String">
+        delete from AU_BC_PAY_TYPE where id_ in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+</mapper>

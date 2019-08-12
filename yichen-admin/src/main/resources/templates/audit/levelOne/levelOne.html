@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org"
+	xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<meta charset="utf-8">
+
+<head th:include="include :: header"></head>
+
+<body class="gray-bg">
+	<div class="container-div ui-layout-center">
+		<div class="row">
+			<div class="col-sm-12 search-collapse">
+				<form class="layui-form">
+					<div class="layui-form-item">
+						<label class="layui-form-label">店厅编码：</label>
+						<div class="layui-input-block">
+							<input type="text" name="chnCode" class="layui-input" />
+						</div>
+					</div>
+					<div class="layui-form-item">
+						<label class="layui-form-label">店厅名称：</label>
+						<div class="layui-input-block">
+							<input type="text" name="chnName" class="layui-input" />
+						</div>
+					</div>
+					<div class="layui-form-item">
+						<label class="layui-form-label">稽核状态：</label>
+						<div class="layui-input-block">
+							<select name="status" th:with="type=${@dict.getType('audit_checke_status')}">
+								<option value="">请选择</option>
+								<option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+							</select>
+						</div>
+					</div>
+					<div class="layui-form-item">
+						<label class="layui-form-label">单位：</label>
+						<div class="layui-input-block">
+							<div class="treeSelect-box">
+								<input type="text" name="company" class="layui-input companyBlock" value="有限公司" data-id="0" readonly />
+								<div id="companyTree" class="treeSelect-content hide"></div>
+							</div>
+						</div>
+					</div>
+					<div class="layui-form-item">
+						<label class="layui-form-label">日期范围：</label>
+						<div class="layui-input-block">
+							<input type="text" name="dateRange" class="layui-input" id="dateRange" readonly />
+						</div>
+					</div>
+					<div class="layui-form-item">
+						<div class="layui-input-block">
+							<button type="button" class="layui-btn custom-btn" lay-submit lay-filter="levleOneForm">查询</button>
+							<button type="button" class="layui-btn export-btn">导出</button>
+						</div>
+					</div>
+				</form>
+			</div>
+			<div class="col-sm-12 select-table table-striped">
+				<table id="levelOneTable"></table>
+			</div>
+		</div>
+	</div>
+
+	<div th:include="include :: footer"></div>
+	<script th:inline="javascript">
+		var editFlag = [[${ @permission.hasPermi('audit:levelOne:edit') }]];
+		var checkFlag = [[${@permission.hasPermi('audit:levelOne:remove') }]];
+	</script>
+	<script th:src="@{/js/levelOne/levelOne.js}"></script>
+
+</body>
+</html>

@@ -1,0 +1,163 @@
+<!DOCTYPE HTML>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<meta charset="utf-8">
+<head th:include="include :: header"></head>
+<body class="white-bg">
+	<div class="ibox-content modal-box">
+		<form class="layui-form">
+			<div class="layui-form-item">
+				<label class="layui-form-label">店厅：</label>
+				<div class="layui-input-block">
+					<input type="text" name="chnName" class="layui-input" readonly />
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<label class="layui-form-label">日期：</label>
+				<div class="layui-input-block">
+					<input type="text" name="dateNo" class="layui-input" readonly />
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<label class="layui-form-label">金额：</label>
+				<div class="layui-input-block">
+					<input type="text" name="money" class="layui-input" readonly/>
+				</div>
+			</div>
+		</form>
+		<div style="padding-top: 10px;">
+			<table id="factnetPaidTable"></table>
+		</div>
+	</div>
+	<div th:include="include::footer"></div>
+	<script>
+		$(function() {
+			console.log('factnetPaidView');
+			var prefix = ctx + 'audit/levelOne';
+			
+			var options = {
+				//id : 'auditTable',
+				//url : prefix + "/listSj",
+				data: [{
+					rowNum: '1',
+					payType: '现金',
+					dateNo: '2019-07-19',
+					money: '20343',
+					chequeNo: '',
+					bankCode: '',
+					userName: '',
+					belongBack: '',
+					openBack: '',
+					status: '',
+					serial: '',
+					digest: '',
+					businessCode: '',
+					bankAcc: '',
+					crmSerial: '',
+					phone: '',
+					createBills: '',
+					crmMoney: ''
+				}],
+				showExport : false,
+				search : false,
+				showSearch : false,
+				showPageGo : false,
+				showRefresh : false,
+				showColumns : false,
+				showToggle : false,
+				height : 380,
+				queryParams : function(params) {
+					// 传递参数查询参数
+					
+					return params;
+				},
+				columns : [ {
+					field : 'rowNum',
+					title : '序号'
+				}, {
+					field : 'payType',
+					title : '缴款类型',
+					sortable : false
+				}, {
+					field : 'dateNo',
+					title : '发生交易日期',
+					sortable : false
+				}, {
+					field : 'money',
+					title : '缴款金额',
+					sortable : false
+				}, {
+					field : 'chequeNo',
+					title : '支票号',
+					sortable : false
+				},
+				{
+					field : 'bankCode',
+					title : '银行账号',
+					sortable : false
+				},
+				{
+					field : 'userName',
+					title : '账号名称',
+					sortable : false
+				},
+				{
+					field : 'belongBack',
+					title : '所属银行',
+					sortable : false
+				},
+				{
+					field : 'openBack',
+					title : '开户行',
+					sortable : false
+				},
+				{
+					field : 'status',
+					title : '核销状态',
+					sortable : false
+				},
+				{
+					field : 'serial',
+					title : '流水号',
+					sortable : false
+				},
+				{
+					field : 'digest',
+					title : '摘要',
+					sortable : false
+				},
+				{
+					field : 'businessCode',
+					title : '企业账户商户编码',
+					sortable : false
+				},
+				{
+					field : 'bankAcc',
+					title : '绑定银行账号',
+					sortable : false
+				},
+				{
+					field : 'crmSerial',
+					title : 'CRM流水号',
+					sortable : false
+				},
+				{
+					field : 'phone',
+					title : '受理手机号码',
+					sortable : false
+				},
+				{
+					field : 'createBills',
+					title : '是否生单',
+					sortable : false
+				},
+				{
+					field : 'crmMoney',
+					title : '是否CRM金额',
+					sortable : false
+				}]
+			};
+			$('#factnetPaidTable').bootstrapTable(options);
+		});
+	</script>
+</body>
+</html>

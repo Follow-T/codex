@@ -1,0 +1,124 @@
+<!DOCTYPE HTML>
+<html  lang="zh" xmlns:th="http://www.thymeleaf.org">
+<meta charset="utf-8">
+<head th:include="include :: header"></head>
+<style>
+.fa-search{
+    position: relative;
+    top: 5px;
+}
+
+</style>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal m" id="form-auDimCmToCustInfo-add" th:object="${auDimCmToCustInfo}">
+			<input type="hidden" name="orgid" th:field="*{orgid}"/>
+			<div class="form-group select-list">	
+				<label class="col-sm-2 control-label">客户经理姓名：</label>
+				<div class="col-sm-3">
+					<input id="customermanager" readonly name="customermanager" class="form-control" type="text">
+				</div>
+				<div class="col-sm-1">
+					<i class="fa fa-search" onclick="clickEvent(ctx+'config/auDimCmStaffInfo','客户经理')"></i> 
+				</div>
+				<label class="col-sm-2 control-label">电信银行账号：</label>
+				<div class="col-sm-3">
+					<input id="bankaaccount" readonly name="bankaaccount" class="form-control" type="text">
+				</div>
+				<div class="col-sm-1">
+					<i class="fa fa-search"  onclick="clickEvent(ctx+'config/bankAccount/account','银行账户')"></i> 
+				</div>
+			</div>
+			<div class="form-group select-list">	
+				<label class="col-sm-2 control-label">客户单位银行账号：</label>
+				<div class="col-sm-4">
+					<input id="customerbankaccount" name="customerbankaccount" class="form-control" type="text">
+				</div>
+				<label class="col-sm-2 control-label">客户单位银行账户名：</label>
+				<div class="col-sm-4">
+					<input id="customeraccname" name="customeraccname" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group select-list">	
+				<label class="col-sm-2 control-label">合同号：</label>
+				<div class="col-sm-4">
+					<input id="pactno" name="pactno" class="form-control" type="text">
+				</div>
+				<label class="col-sm-2 control-label">合同名称：</label>
+				<div class="col-sm-4">
+					<input id="pactname" name="pactname" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group select-list">	
+				<label class="col-sm-2 control-label">资金首选用途：</label>
+				<div class="col-sm-4">
+					<select name="firstuse" th:with="type=${@dict.getType('audit_firstUse')}">
+									<option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+					</select>
+				</div>
+				<label class="col-sm-2 control-label">可用状态标识：</label>
+				<div class="col-sm-4">
+					<select name="enable" th:with="type=${@dict.getType('sys_normal_disable')}">
+								<option value=''>请选择</option>
+								<option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+					</select>
+				</div>
+			</div>
+			<div class="form-group select-list">	
+				<label class="col-sm-2 control-label">客户单位名称：</label>
+				<div class="col-sm-4">
+					<input id="customerunitname" name="customerunitname" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-2 control-label">备注信息：</label>
+				<div class="col-sm-10">
+					<input id="remark" name="remark" class="form-control" type="text">
+				</div>
+			</div>
+		</form>
+	</div>
+    <div th:include="include::footer"></div>
+    <script type="text/javascript">
+	var prefix = ctx + "config/auDimCmToCustInfo";
+	    $(function() {
+			var url = ctx + "config/auDimCmStaffInfo";
+			$("#form-auDimCmToCustInfo-add").validate({
+				rules:{
+					xxxx:{
+						required:true,
+					},
+				},
+				focusCleanup: true
+			});
+			window.parent.node = undefined;
+			window.parent.bankId = undefined;
+	    })
+		function submitHandler() {
+	        if ($.validate.form()) {
+	            $.operate.save(prefix + "/add", $('#form-auDimCmToCustInfo-add').serialize());
+	        }
+	    }
+		
+		function clickEvent(url,name){
+			var params = {
+					height:600,
+					width:800,
+					url: 	url,
+					title: name,
+					btnArray: ['取消', '确定'], // 按钮数组,
+					callback1: function(index, layero) { // 确定按钮的回调
+						if(window.parent.node){
+							$('#customermanager').val(window.parent.node);
+						}
+						if(window.parent.bankId){
+							$('#bankaaccount').val(window.parent.bankId);
+						}
+						
+					}
+				}
+				$.modal.editOpen(params);
+		}
+	</script>
+</body>
+</html>

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.asiainfo.audit.mapper.AuditIncomeMapper">
+
+    <select id="selectIncomeList" parameterType="map" resultType="map">
+        SELECT
+        a.hallid_,
+        e.name_ hall_type_name,
+        c.code_,
+        c.name_ hall_name,
+        a.businessdate_,
+        a.amount_,
+        d.dict_label,
+        '系统来源' AS system_src
+        FROM
+        AU_NET_PAID a,
+        AU_HALL c,
+        (
+        SELECT
+        *
+        FROM
+        sys_dict_data
+        WHERE
+        dict_type = 'audit_checke_status'
+        ) d,
+        AU_DIM_HALL_TYPE e
+        <where>
+            a.hallid_ = c.id_
+            AND a.auditstate_ = d.dict_value
+            AND c.halltypeid_ = e.id_
+            <if test="chnCode != null  and chnCode != '' ">
+                and c.code_  like CONCAT('%',#{chnCode},'%')
+            </if>
+            <if test="chnName != null  and chnName != '' ">
+                and c.name_  like CONCAT('%',#{chnName},'%')
+            </if>
+            <if test="auditState != null  and auditState != '' ">
+                and a.auditstate_ = #{auditState}
+            </if>
+            <if test="beginTime != null and beginTime != ''">
+                AND date_format(a.businessdate_,'%y%m%d') &gt;= date_format(#{beginTime},'%y%m%d')
+            </if>
+            <if test="endTime != null and endTime != ''">
+                AND date_format(a.businessdate_,'%y%m%d') &lt;= date_format(#{endTime},'%y%m%d')
+            </if>
+        </where>
+    </select>
+</mapper>

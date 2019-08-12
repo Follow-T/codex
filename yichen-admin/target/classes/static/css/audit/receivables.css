@@ -1,0 +1,51 @@
+.addr-url{
+    color:#f00;
+    text-decoration: underline !important;
+}
+.modal-box .against {
+    float: right;
+    margin-right: 20px;
+    color: #1E9FFF;
+    font-size: 12px;
+}
+.modal-box .against:hover {
+    opacity: .9;
+}
+.layui-input-block{
+    width: auto;
+}
+.down-icon{
+    color: #1E9FFF;
+    font-size: 16px;
+}
+.flex-sp-center{
+    display: flex;
+    align-items: center;
+}
+.table-input{
+    width:80px;
+}
+.table-select{
+    width:120px;
+}
+.pro-sel dl{
+    max-height: 120px !important;
+}
+.project-add{
+    font-size: 22px;
+    color: #1ab394;
+}
+.project-minus{
+    font-size: 22px;
+    color: #f8ac59;
+}
+.flex-start-vcenter{
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+}
+.flex-sp-vcenter{
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+}

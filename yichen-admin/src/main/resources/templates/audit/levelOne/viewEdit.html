@@ -1,0 +1,56 @@
+<!DOCTYPE HTML>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<meta charset="utf-8">
+<head th:include="include :: header"></head>
+<body class="white-bg">
+	<div class="ibox-content modal-box">
+		<div>
+			<div class="layui-form-item">
+				<label class="layui-form-label">店厅：</label>
+				<div class="layui-input-block">
+					<input type="text" name="chnName" class="layui-input" readonly />
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<label class="layui-form-label">日期：</label>
+				<div class="layui-input-block">
+					<input type="text" name="dateNo" class="layui-input" readonly />
+				</div>
+			</div>
+		</div>
+		<div class="line-bottom">
+			<table id="receivableTable"></table>
+			<p>本日应收款：<span>4234234</span></p>
+		</div>
+		<div class="line-bottom">
+			<table id="paidTable"></table>
+			<p>本日实缴款：<span>54524</span></p>
+		</div>
+		<div class="line-bottom" style="padding-top: 10px;">
+			<table id="cdTable"></table>
+			<ul class="data-list">
+				<li>
+					本日扎账结果：<span>2324</span>
+				</li>
+				<li>
+					累计扎帐结果：<span>54535</span>
+				</li>
+				<li>
+					上期未缴款：<span>4646</span>
+				</li>
+			</ul>
+			<div>
+				<label class="layui-form-label">备注:</label>
+				<div class="textarea-block">
+					<textarea class="layui-textarea editRemark" readonly></textarea>
+				</div>
+			</div>	
+		</div>
+		<div style="padding-top: 10px;">
+			<table id="auditTable"></table>
+		</div>
+	</div>
+	<div th:include="include::footer"></div>
+	<script th:src="@{/js/levelOne/viewEdit.js}"></script>
+</body>
+</html>

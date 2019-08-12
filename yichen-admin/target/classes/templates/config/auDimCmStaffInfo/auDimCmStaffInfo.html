@@ -1,0 +1,97 @@
+<!DOCTYPE HTML>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<meta charset="utf-8">
+<head th:include="include :: header"></head>
+<body class="gray-bg">
+    
+     <div class="container-div">
+		<div class="row">
+			<div class="col-sm-12 search-collapse">
+				<form id="formId">
+					<div class="select-list">
+						<ul>
+							<li>
+								客户经理姓名：<input type="text" name="staffname"/>
+							</li>
+							<li>
+								<a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+								<a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+							</li>
+						</ul>
+					</div>
+				</form>
+			</div>
+			
+			<div class="col-sm-12 select-table table-striped">
+				<table id="bootstrap-table" data-mobile-responsive="true"></table>
+			</div>
+		</div>
+	</div>
+    <div th:include="include :: footer"></div>
+    <script th:inline="javascript">
+        var editFlag = [[${@permission.hasPermi('config:auDimCmStaffInfo:edit')}]];
+        var removeFlag = [[${@permission.hasPermi('config:auDimCmStaffInfo:remove')}]];
+        var prefix = ctx + "config/auDimCmStaffInfo";
+        $(function() {
+            var options = {
+                url: prefix + "/list",
+                createUrl: prefix + "/add",
+                updateUrl: prefix + "/edit/{id}",
+                removeUrl: prefix + "/remove",
+				exportUrl: prefix + "/export",
+                modalName: "客户",
+		        showExport: true,
+                columns: [{
+		            radio: true
+		        },
+				{
+					field : 'id', 
+					title : '系统ID',
+					visible: false
+				},
+				{
+					field : 'staffid', 
+					title : '客户经理ID',
+					sortable: true
+				},
+				{
+					field : 'staffname', 
+					title : '客户经理姓名',
+					sortable: true
+				},
+				{
+					field : 'staffcode', 
+					title : '客户经理编码',
+					sortable: true
+				},
+				{
+					field : 'crmstfid', 
+					title : 'CRM系统编号',
+					sortable: true
+				},
+				{
+					field : 'regionname', 
+					title : '所属机构名称',
+					sortable: true
+				},
+				{
+					field : 'regionid', 
+					title : '所属机构编码',
+					sortable: true
+				},
+				{
+					field : 'state', 
+					title : '系统状态',
+					sortable: true
+				}]
+            };
+            $.table.init(options);
+            $('#bootstrap-table').on('check.bs.table', function (row,ele) {
+      		  // ...
+      		  console.log(ele.staffname);
+      		  window.parent.node = ele.staffname;
+      		})
+        });
+    </script>
+</body>
+</html>

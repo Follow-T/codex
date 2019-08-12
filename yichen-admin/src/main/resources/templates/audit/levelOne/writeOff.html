@@ -1,0 +1,59 @@
+<!DOCTYPE HTML>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<meta charset="utf-8">
+<head th:include="include :: header"></head>
+<body class="white-bg">
+	<div class="ibox-content modal-box">
+		<form class="layui-form">
+			<div class="layui-form-item">
+				<label class="layui-form-label">店厅：</label>
+				<div class="layui-input-block">
+					<input type="text" name="chnName" class="layui-input" readonly />
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<label class="layui-form-label">日期：</label>
+				<div class="layui-input-block">
+					<input id="writeOffDate" type="text" name="dateNo" class="layui-input" readonly />
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<label class="layui-form-label">状态：</label>
+				<div class="layui-input-block">
+					<select name="status">
+						<option value="">请选择</option>
+						<option value="long">长款</option>
+						<option value="short">短款</option>
+					</select>
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<label class="layui-form-label">金额：</label>
+				<div class="layui-input-block">
+					<input type="text" name="money" class="layui-input" />
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<label class="layui-form-label">款龄：</label>
+				<div class="layui-input-block">
+					<input type="text" name="moneyAge" class="layui-input" />
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<label class="layui-form-label">备注：</label>
+				<div class="layui-input-block">
+					<input type="text" name="remarks" class="layui-input" />
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<button type="button" class="layui-btn custom-btn" lay-submit lay-filter="writeOffForm">查询</button>
+			</div>
+		</form>
+		<div style="padding-top: 10px;">
+			<table id="writeOffTable"></table>
+		</div>
+	</div>
+	<div th:include="include::footer"></div>
+	<script th:src="@{/js/levelOne/writeOff.js}"></script>
+</body>
+</html>

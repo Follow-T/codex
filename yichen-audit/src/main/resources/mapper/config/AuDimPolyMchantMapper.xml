@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.asiainfo.config.mapper.AuDimPolyMchantMapper">
+    
+    <resultMap type="AuDimPolyMchant" id="AuDimPolyMchantResult">
+        <result property="orgId"    column="org_id"    />
+        <result property="orgName"    column="org_name"    />
+        <result property="mchantId"    column="mchant_id"    />
+        <result property="settlementBankAcct"    column="settlement_bank_acct"    />
+    </resultMap>
+	
+	<sql id="selectAuDimPolyMchantVo">
+        select org_id, org_name, mchant_id, settlement_bank_acct from AU_DIM_POLY_MCHANT
+    </sql>
+	
+    <select id="selectAuDimPolyMchantList" parameterType="AuDimPolyMchant" resultMap="AuDimPolyMchantResult">
+		SELECT
+			t.id_ org_id,
+			t.name_ org_name,
+			a.mchant_id,
+			a.settlement_bank_acct
+		FROM
+			AU_DIM_POLY_MCHANT a
+		LEFT JOIN AU_ORG t ON a.org_id = t.id_
+		WHERE
+			t.parentid_ = 10000
+            <if test="orgId != null "> and a.org_id = #{orgId}</if>
+    </select>
+    
+    <select id="selectAuDimPolyMchantById" parameterType="Integer" resultMap="AuDimPolyMchantResult">
+        <include refid="selectAuDimPolyMchantVo"/>
+        where org_id = #{orgId}
+    </select>
+        
+    <insert id="insertAuDimPolyMchant" parameterType="AuDimPolyMchant">
+        insert into AU_DIM_POLY_MCHANT
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="orgId != null  ">org_id,</if>
+			<if test="orgName != null  and orgName != ''  ">org_name,</if>
+			<if test="mchantId != null  and mchantId != ''  ">mchant_id,</if>
+			<if test="settlementBankAcct != null  ">settlement_bank_acct,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="orgId != null  ">#{orgId},</if>
+			<if test="orgName != null  and orgName != ''  ">#{orgName},</if>
+			<if test="mchantId != null  and mchantId != ''  ">#{mchantId},</if>
+			<if test="settlementBankAcct != null  ">#{settlementBankAcct},</if>
+         </trim>
+    </insert>
+	 
+    <update id="updateAuDimPolyMchant" parameterType="AuDimPolyMchant">
+        update AU_DIM_POLY_MCHANT
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="orgName != null  and orgName != ''  ">org_name = #{orgName},</if>
+            <if test="mchantId != null  and mchantId != ''  ">mchant_id = #{mchantId},</if>
+            <if test="settlementBankAcct != null  ">settlement_bank_acct = #{settlementBankAcct},</if>
+        </trim>
+        where org_id = #{orgId}
+    </update>
+
+	<delete id="deleteAuDimPolyMchantById" parameterType="Integer">
+        delete from AU_DIM_POLY_MCHANT where org_id = #{orgId}
+    </delete>
+	
+    <delete id="deleteAuDimPolyMchantByIds" parameterType="String">
+        delete from AU_DIM_POLY_MCHANT where org_id in 
+        <foreach item="orgId" collection="array" open="(" separator="," close=")">
+            #{orgId}
+        </foreach>
+    </delete>
+    
+</mapper>

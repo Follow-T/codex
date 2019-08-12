@@ -1,0 +1,65 @@
+<!DOCTYPE HTML>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<meta charset="utf-8">
+<head th:include="include :: header"></head>
+<style>
+	.modal-box .against {
+		float: right;
+    margin-right: 20px;
+    color: #1E9FFF;
+    font-size: 12px;
+	}
+	.modal-box .against:hover {
+		opacity: .9;
+	}
+</style>
+<body class="white-bg">
+	<div class="ibox-content modal-box">
+		<div>
+			<div class="layui-form-item">
+				<label class="layui-form-label">店厅：</label>
+				<div class="layui-input-block">
+					<input type="text" name="chnName" class="layui-input" th:value="${autditOneLevel.chn_name}" readonly />
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<label class="layui-form-label">日期：</label>
+				<div class="layui-input-block">
+					<input type="text" name="dateNo" class="layui-input" th:value="${autditOneLevel.date_no}" readonly />
+				</div>
+			</div>
+		</div>
+		<div class="line-bottom">
+			<table id="receivableTable"></table>
+			<p>本日应收款：<span>[[${autditOneLevel.factnet_Paid}]]</span></p>
+		</div>
+		<div class="line-bottom">
+			<table id="paidTable"></table>
+			<p>本日实缴款：<span>[[${autditOneLevel.bossout_rcb}]]</span></p>
+			<ul class="data-list">
+				<li>
+					<p class="disInlineBl">本日扎账结果：<span>[[${autditOneLevel.short_rpts}]]</span></p>
+					<a class="mr10 against">长短款冲销</a>
+				</li>
+				<li>
+					累计扎帐结果：<span>[[${autditOneLevel.bossin_rcb}]]</span>
+				</li>
+				<li>
+					上期未缴款：<span>[[${autditOneLevel.long_rpts}]]</span>
+				</li>
+			</ul>
+			<div>
+				<label class="layui-form-label">备注:</label>
+				<div class="textarea-block">
+					<textarea class="layui-textarea editRemark"></textarea>
+				</div>
+			</div>	
+		</div>
+		<div style="padding-top: 10px;">
+			<table id="auditTable"></table>
+		</div>
+	</div>
+	<div th:include="include::footer"></div>
+	<script th:src="@{/js/levelOne/edit.js}"></script>
+</body>
+</html>

@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org"
+	xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<meta charset="utf-8">
+<head th:include="include :: header"></head>
+<body class="gray-bg">
+	<div class="container-div">
+		<div class="row">
+			<div class="col-sm-12 search-collapse">
+				<form id="role-form">
+					<div class="select-list">
+						<ul>
+							<li>
+								账户号码：<input type="text" name="roleName"/>
+							</li>
+							<li>
+								开户行：<input type="text" name="roleKey"/>
+							</li>
+							<li>
+								户名：<input type="text" name="roleKey"/>
+							</li>
+							<li>
+								<a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+							    <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+							</li>
+						</ul>
+					</div>
+				</form>
+			</div>
+		
+			<div class="btn-group-sm" id="toolbar" role="group">
+				<a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="system:role:add">
+	                <i class="fa fa-plus"></i> 新增
+	            </a>
+	            <a class="btn btn-primary btn-edit disabled" onclick="$.operate.edit()" shiro:hasPermission="system:role:edit">
+		            <i class="fa fa-edit"></i> 修改
+		        </a>
+				<a class="btn btn-danger btn-del disabled" onclick="$.operate.removeAll()" shiro:hasPermission="system:role:remove">
+		            <i class="fa fa-remove"></i> 删除
+		        </a>
+		        <a class="btn btn-info" onclick="$.table.importExcel()" shiro:hasPermission="system:user:import">
+		            <i class="fa fa-upload"></i> 导入
+		        </a>
+		        <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="system:role:export">
+		            <i class="fa fa-download"></i> 导出
+		        </a>
+	        </div>
+	        
+	        <div class="col-sm-12 select-table text-nowrap">
+			    <table id="bootstrap-table" data-mobile-responsive="true"></table>
+			</div>
+		</div>
+	</div>
+	<div th:include="include :: footer"></div>
+	<script th:inline="javascript">
+		var editFlag = [[${@permission.hasPermi('system:role:edit')}]];
+		var removeFlag = [[${@permission.hasPermi('system:role:remove')}]];
+		var datas = [[${@dict.getType('sys_normal_disable')}]];
+		var prefix = ctx + "system/role";
+
+		
+		$(function() {
+		    var options = {
+		        url: prefix + "/list",
+		        createUrl: prefix + "/add",
+		        updateUrl: "/system/role/test/edit",
+		        removeUrl: prefix + "/remove",
+		        exportUrl: prefix + "/export",
+		        //sortName: "roleSort",
+		        modalName: "绑定账户",
+		        columns: [{
+		            checkbox: true
+		        },
+		        {
+		            field: 'roleId',
+		            title: '序号',
+		            formatter:function(value,row,index){
+	                     return index+1;//这样的话每翻一页都会重新从1开始，
+	                }
+		        },
+		        /*{
+		            field: 'id',
+		            title: '单位',
+		            sortable: true
+		        },
+		        {
+		            field: 'code',
+		            title: '社会渠道',
+		            sortable: true
+		        },
+		        {
+		            field: 'name',
+		            title: '社会渠道编码',
+		            sortable: true
+		        },*/
+		        {
+		            field: 'auHallBankSignT.accountno',
+		            title: '绑定账户',
+		            sortable: true
+		        },
+		        {
+		            field: 'auHallBankSignT.companyaccountname',
+		            title: '户名',
+		            sortable: true
+		        },
+		        {
+		            field: 'auHallBankSignT.useraccountno',
+		            title: '开户行',
+		            sortable: true
+		        },
+		        {
+		            field: 'roleSort',
+		            title: '最后更新时间',
+		            sortable: true
+		        },
+		        {
+		            field: 'roleSort',
+		            title: '最后更新人',
+		            sortable: true,
+		        },
+		        {
+		            field: 'roleSort',
+		            title: '备注',
+		            sortable: true
+		        },
+		        {
+	        	visible: editFlag == 'hidden' ? false : true,
+	        	title: '默认账户',
+	        	align: 'center',
+	        	formatter: function (value, row, index) {
+	        		return statusTools(row);
+	        	}
+	       	    },
+		        {
+		            title: '操作',
+		            align: 'center',
+		            formatter: function(value, row, index) {
+		                var actions = [];
+		                actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="#" onclick="$.operate.edit(\'' + row.roleId + '\')"><i class="fa fa-edit"></i>编辑</a> ');
+		                actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="#" onclick="$.operate.remove(\'' + row.roleId + '\')"><i class="fa fa-remove"></i>删除</a>');
+		                return actions.join('');
+		            }
+		        }]
+		    };
+		    $.table.init(options);
+		});
+		
+		/* 角色管理-分配数据权限 */
+		function rule(roleId) {
+		    var url = prefix + '/rule/' + roleId;
+		    $.modal.open("分配数据权限", url);
+		}
+		
+		
+		
+		/* 角色状态显示 */
+		function statusTools(row) {
+		    if (row.status == 1) {
+    			return '<i class=\"fa fa-toggle-off text-info fa-2x\" onclick="enable(\'' + row.roleId + '\')"></i> ';
+    		} else {
+    			return '<i class=\"fa fa-toggle-on text-info fa-2x\" onclick="disable(\'' + row.roleId + '\')"></i> ';
+    		}
+		}
+		
+		/* 角色管理-停用 */
+		function disable(roleId) {
+			$.modal.confirm("确认要停用角色吗？","ddkkdsk", function() {
+				$.operate.post(prefix + "/changeStatus", { "roleId": roleId, "status": 1 });
+		    })
+		}
+
+		/* 角色管理启用 */
+		function enable(roleId) {
+			$.modal.confirm("确认要启用角色吗？","dsfsdaf", function() {
+				$.operate.post(prefix + "/changeStatus", { "roleId": roleId, "status": 0 });
+				var allTableData = $('#bootstrap-table').bootstrapTable('getData');
+	            $.each(allTableData,function(i,e){
+	        	  	if(e.roleId!=roleId){
+	        		  	$.operate.post(prefix + "/changeStatus", { "roleId": e.roleId, "status": 1 });
+	        	  	}
+	          	})
+		    })
+		}
+	</script>
+</body>
+</html>

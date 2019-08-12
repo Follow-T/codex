@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.asiainfo.audit.mapper.AuditLevelOneMapper">
+
+    <resultMap type="AuditLevelOne" id="AuditLevelOneResult">
+        <result property="id"    column="seq_id"    />
+        <result property="dateNo"    column="date_no"    />
+        <result property="latnName"    column="latn_name"    />
+        <result property="chnCode"    column="chn_code"    />
+        <result property="chnName"    column="chn_name"    />
+        <result property="chnTypeName"    column="chn_type_name"    />
+        <result property="auditState"    column="audit_state"    />
+        <result property="bossinRcb"    column="bossin_rcb"    />
+        <result property="bossoutRcb"    column="bossout_rcb"    />
+        <result property="factnetPaid"    column="factnet_Paid"    />
+        <result property="factnetRpts"    column="factnet_rpts"    />
+        <result property="longRpts"    column="long_rpts"    />
+        <result property="shortRpts"    column="short_rpts"    />
+        <result property="dealCnt"    column="deal_cnt"    />
+    </resultMap>
+
+    <sql id="selectAuditFisrtRoundTempVo">
+        select seq_id,date_no, latn_name, chn_code, chn_name, chn_type_name, audit_state, bossin_rcb, bossout_rcb, factnet_Paid, factnet_rpts, long_rpts, short_rpts, deal_cnt from audit_fisrt_round_temp
+    </sql>
+
+    <select id="selectAuditLevelOneList" parameterType="AuditLevelOne" resultType="map">
+        SELECT
+        a.*, c.dict_label audit_status_cn
+        FROM
+        (
+        SELECT
+        seq_id,
+        date_no,
+        latn_name,
+        chn_code,
+        chn_name,
+        chn_type_name,
+        bossin_rcb,
+        bossout_rcb,
+        factnet_Paid,
+        factnet_rpts,
+        long_rpts,
+        short_rpts,
+        deal_cnt,
+        IFNULL(b.audit_status, 1) audit_status
+        FROM
+        audit_fisrt_round_temp a
+        LEFT OUTER JOIN (
+        SELECT
+        a.check_seq,
+        audit_status
+        FROM
+        audit_fisrt_round_check_logs a
+        INNER JOIN (
+        SELECT
+        check_seq,
+        max(create_time) max_time
+        FROM
+        audit_fisrt_round_check_logs
+        GROUP BY
+        check_seq
+        ) b ON a.check_seq = b.check_seq
+        AND a.create_time = b.max_time
+        ) b ON a.seq_id = b.check_seq
+        ) a
+        LEFT OUTER JOIN sys_dict_data c ON a.audit_status = c.dict_value
+        AND c.dict_type = 'audit_checke_status'
+        <where>
+            <if test="params.beginTime != null and params.beginTime != ''"><!-- 开始时间检索 -->
+                AND date_format(date_no,'%y%m%d') &gt;= date_format(#{params.beginTime},'%y%m%d')
+            </if>
+            <if test="params.endTime != null and params.endTime != ''"><!-- 结束时间检索 -->
+                AND date_format(date_no,'%y%m%d') &lt;= date_format(#{params.endTime},'%y%m%d')
+            </if>
+            <if test="dateNo != null  and dateNo != '' "> AND date_format(date_no,'%y%m%d') = date_format(#{dateNo},'%y%m%d')</if>
+            <if test="latnName != null  and latnName != '' "> and latn_name like CONCAT('%',#{latnName},'%')</if>
+            <if test="chnCode != null  and chnCode != '' "> and chn_code like CONCAT('%',#{chnCode},'%')</if>
+            <if test="chnName != null  and chnName != '' "> and chn_name  like CONCAT('%',#{chnName},'%')</if>
+            <if test="chnTypeName != null  and chnTypeName != '' "> and chn_type_name = #{chnTypeName}</if>
+            <if test="auditState != null  and auditState != '' "> and audit_status = #{auditState}</if>
+            <if test="bossinRcb != null "> and bossin_rcb = #{bossinRcb}</if>
+            <if test="bossoutRcb != null "> and bossout_rcb = #{bossoutRcb}</if>
+            <if test="factnetPaid != null "> and factnet_Paid = #{factnetPaid}</if>
+            <if test="factnetRpts != null "> and factnet_rpts = #{factnetRpts}</if>
+            <if test="longRpts != null "> and long_rpts = #{longRpts}</if>
+            <if test="shortRpts != null "> and short_rpts = #{shortRpts}</if>
+            <if test="dealCnt != null "> and deal_cnt = #{dealCnt}</if>
+        </where>
+    </select>
+
+    <select id="selectOneLevelById" parameterType="java.lang.Integer" resultType="map">
+        <include refid="selectAuditFisrtRoundTempVo"></include>
+        where seq_id=#{id}
+    </select>
+    <select id="selectYsListByCnd" parameterType="AuditLevelOne" resultType="map">
+            select
+            (@rowNum:=@rowNum+1) as rowNum,
+            chn_code,
+            NOW() date_no,
+            '张三' as cust_name,
+            '一级稽核操作' as business_short_desc,
+            round(bossin_rcb+bossout_rcb,2) as bosstotal,
+            '成都财务部' as business_manage_dept,
+            '当前操作审核' as note
+            from audit_fisrt_round_temp
+            left outer join (SELECT @rowNum := 0)t on 1=1
+
+    </select>
+
+    <select id="selectSjListByCnd" parameterType="AuditLevelOne" resultType="map">
+        select
+        (@rowNum:=@rowNum+1) as rowNum,
+        '现金' as factnet_Paid_type,
+        DATE_FORMAT(now(),'%Y/%m/%d') yy_date,
+        DATE_FORMAT(now(),'%Y/%m/%d') jy_date,
+        '1004140805200100001' as BANK_ACCT,
+        factnet_Paid
+        from audit_fisrt_round_temp
+        left outer join (SELECT @rowNum := 0)t on 1=1
+    </select>
+
+    <select id="selectCdListByCnd" parameterType="map" resultType="map">
+        <include refid="selectAuditFisrtRoundTempVo"></include>
+        <where>
+            <if test="params.beginTime != null and params.beginTime != ''"><!-- 开始时间检索 -->
+                AND date_format(date_no,'%y%m%d') &gt;= date_format(#{params.beginTime},'%y%m%d')
+            </if>
+            <if test="params.endTime != null and params.endTime != ''"><!-- 结束时间检索 -->
+                AND date_format(date_no,'%y%m%d') &lt;= date_format(#{params.endTime},'%y%m%d')
+            </if>
+            <if test="dateNo != null  and dateNo != '' "> AND date_format(date_no,'%y%m%d') = date_format(#{dateNo},'%y%m%d')</if>
+            <if test="latnName != null  and latnName != '' "> and latn_name = #{latnName}</if>
+            <if test="chnCode != null  and chnCode != '' "> and chn_code = #{chnCode}</if>
+            <if test="chnName != null  and chnName != '' "> and chn_name = #{chnName}</if>
+            <if test="chnTypeName != null  and chnTypeName != '' "> and chn_type_name = #{chnTypeName}</if>
+            <if test="auditState != null  and auditState != '' "> and audit_state = #{auditState}</if>
+            <if test="bossinRcb != null "> and bossin_rcb = #{bossinRcb}</if>
+            <if test="bossoutRcb != null "> and bossout_rcb = #{bossoutRcb}</if>
+            <if test="factnetPaid != null "> and factnet_Paid = #{factnetPaid}</if>
+            <if test="factnetRpts != null "> and factnet_rpts = #{factnetRpts}</if>
+            <if test="longRpts != null "> and long_rpts = #{longRpts}</if>
+            <if test="shortRpts != null "> and short_rpts = #{shortRpts}</if>
+            <if test="dealCnt != null "> and deal_cnt = #{dealCnt}</if>
+        </where>
+    </select>
+
+    <select id="selectOneLevelCheckHisInfo" parameterType="java.lang.Integer" resultType="map">
+              select
+        (@rowNum:=@rowNum+1) as rownum,
+        b.user_name,
+        a.auditter_dept,
+        a.audit_desc,
+        date_format(a.create_time, '%Y-%m-%d %h:%i:%s') check_time
+         from audit_fisrt_round_check_logs a
+        left outer join   sys_user b on a.create_by=b.user_id
+        left outer join  sys_dict_data c on a.audit_status=c.dict_code and c.dict_type='audit_checke_status'
+        left outer join (SELECT @rowNum := 0)t on 1=1
+        where check_seq=#{id}
+        order by a.create_time
+    </select>
+
+    <insert id="saveOneLevelCheck" parameterType="map">
+        insert into audit_fisrt_round_check_logs
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="check_seq != null">
+                check_seq,
+            </if>
+            <if test="chn_code != null and chn_code != '' ">
+                chn_code,
+            </if>
+            <if test="audit_desc != null and audit_desc != '' ">
+                audit_desc,
+            </if>
+            <if test="audit_status != null and audit_status != '' ">
+                audit_status,
+            </if>
+            <if test="auditter_dept != null and auditter_dept != '' ">
+                auditter_dept,
+            </if>
+            <if test="create_by != null and create_by != '' ">
+                create_by,
+            </if>
+            <if test="create_time != null ">
+                create_time,
+            </if>
+            <if test="update_by != null and update_by != '' ">
+                update_by,
+            </if>
+            <if test="update_time != null ">
+                update_time,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="check_seq != null">
+                #{check_seq},
+            </if>
+            <if test="chn_code != null and chn_code != '' ">
+                #{chn_code},
+            </if>
+            <if test="audit_desc != null and audit_desc != '' ">
+                #{audit_desc},
+            </if>
+            <if test="audit_status != null and audit_status != '' ">
+                #{audit_status},
+            </if>
+            <if test="auditter_dept != null and auditter_dept != '' ">
+                #{auditter_dept},
+            </if>
+            <if test="create_by != null and create_by != '' ">
+                #{create_by},
+            </if>
+            <if test="create_time != null ">
+                #{create_time,jdbcType=TIMESTAMP},
+            </if>
+            <if test="update_by != null and update_by != '' ">
+                #{update_by},
+            </if>
+            <if test="update_time != null ">
+                #{update_time,jdbcType=TIMESTAMP},
+            </if>
+        </trim>
+    </insert>
+</mapper>

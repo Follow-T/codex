@@ -1,0 +1,90 @@
+<!DOCTYPE HTML>
+<html  lang="zh" xmlns:th="http://www.thymeleaf.org">
+<meta charset="utf-8">
+<head th:include="include :: header"></head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal m" id="form-auBcPayType-edit" th:object="${auBcPayType}">
+            <input id="id" name="id" th:field="*{id}"  type="hidden">
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">缴费方式编码：</label>
+				<div class="col-sm-8">
+					<input id="code" name="code" th:field="*{code}" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">缴费方式名称：</label>
+				<div class="col-sm-8">
+					<input id="name" name="name" th:field="*{name}" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">稽核周期：</label>
+				<div class="col-sm-8">
+					<input id="period" name="period" th:field="*{period}" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">备注：</label>
+				<div class="col-sm-8">
+					<input id="remark" name="remark" th:field="*{remark}" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">接口标识：</label>
+				<div class="col-sm-8">
+					<input id="faceflag" name="faceflag" th:field="*{faceflag}" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">创建人：</label>
+				<div class="col-sm-8">
+					<input id="createby" name="createby" th:field="*{createby}" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">创建时间：</label>
+				<div class="col-sm-8">
+					<input id="createtime" name="createtime" th:field="*{createtime}" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">更新人：</label>
+				<div class="col-sm-8">
+					<input id="lastupdateby" name="lastupdateby" th:field="*{lastupdateby}" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">更新时间：</label>
+				<div class="col-sm-8">
+					<input id="lastupdatetime" name="lastupdatetime" th:field="*{lastupdatetime}" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">可用状态标识：</label>
+				<div class="col-sm-8">
+					<input id="enable" name="enable" th:field="*{enable}" class="form-control" type="text">
+				</div>
+			</div>
+		</form>
+    </div>
+    <div th:include="include::footer"></div>
+    <script type="text/javascript">
+		var prefix = ctx + "config/auBcPayType";
+		$("#form-auBcPayType-edit").validate({
+			rules:{
+				xxxx:{
+					required:true,
+				},
+			},
+			focusCleanup: true
+		});
+		
+		function submitHandler() {
+	        if ($.validate.form()) {
+	            $.operate.save(prefix + "/edit", $('#form-auBcPayType-edit').serialize());
+	        }
+	    }
+	</script>
+</body>
+</html>

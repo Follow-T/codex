@@ -1,0 +1,41 @@
+<!DOCTYPE HTML>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<meta charset="utf-8">
+<head th:include="include :: header"></head>
+<link th:href="@{/css/audit/receivables.css}" rel="stylesheet"/>
+<body class="white-bg">
+<div class="ibox-content modal-box">
+    <div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">店厅：</label>
+            <div class="layui-input-block">
+                <input type="text" name="chnName" class="layui-input"  th:value="${ysInfo.name_}" readonly />
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">营业日期：</label>
+            <div class="layui-input-block">
+                <input type="text" name="dateNo" class="layui-input"  th:value="${ysInfo.businessdate_}" readonly />
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">合计：</label>
+            <div class="layui-input-block">
+                <input type="text" name="sum" class="layui-input" th:value="${ysInfo.amount_}" readonly />
+            </div>
+        </div>
+    </div>
+    <div style="padding-top: 10px;">
+        <table id="ysSystemTable"></table>
+    </div>
+</div>
+<div th:include="include::footer"></div>
+<script th:inline="javascript">
+    var editFlag = [[${@permission.hasPermi('audit:receivables:edit')}]];
+    var removeFlag = [[${@permission.hasPermi('audit:receivables:remove')}]];
+    var dtId = [[${ysInfo.hallid_}]];
+    var dateNo = [[${ysInfo.businessdate_}]];
+</script>
+<script th:src="@{/js/receivables/detail.js}"></script>
+</body>
+</html>

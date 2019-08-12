@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.asiainfo.config.mapper.AuBankAccountMapper">
+    
+    <resultMap type="AuBankAccount" id="AuBankAccountResult">
+        <result property="id"    column="id_"    />
+        <result property="accno"    column="accno_"    />
+        <result property="name"    column="name_"    />
+        <result property="orgid"    column="orgid_"    />
+        <result property="bankid"    column="bankid_"    />
+        <result property="openbankname"    column="openbankname_"    />
+        <result property="parentmode"    column="parentmode_"    />
+        <result property="currencyid"    column="currencyid_"    />
+        <result property="areaid"    column="areaid_"    />
+        <result property="accattributeid"    column="accattributeid_"    />
+        <result property="accounttype"    column="accounttype_"    />
+        <result property="parentbankaccid"    column="parentbankaccid_"    />
+        <result property="isopenwebbank"    column="isopenwebbank_"    />
+        <result property="accstate"    column="accstate_"    />
+        <result property="balance"    column="balance_"    />
+        <result property="initdate"    column="initdate_"    />
+        <result property="remark"    column="remark_"    />
+        <result property="createby"    column="createby_"    />
+        <result property="createtime"    column="createtime_"    />
+        <result property="lastupdateby"    column="lastupdateby_"    />
+        <result property="lastupdatetime"    column="lastupdatetime_"    />
+        <result property="enable"    column="enable_"    />
+        <result property="warnuserids"    column="warnuserids_"    />
+        <result property="misaccountname"    column="misaccountname_"    />
+        <result property="biinitdate"    column="biinitdate_"    />
+        <result property="bibalance"    column="bibalance_"    />
+        <result property="allowsplit"    column="allowsplit_"    />
+        <result property="orgName"    column="org_name"    />
+        <result property="bankName"    column="bank_name"    />
+    </resultMap>
+	
+	<sql id="selectAuBankAccountVo">
+        select id_, accno_, name_, orgid_, bankid_, openbankname_, parentmode_, currencyid_, areaid_, accattributeid_, accounttype_, parentbankaccid_, isopenwebbank_, accstate_, balance_, initdate_, remark_, createby_, createtime_, lastupdateby_, lastupdatetime_, enable_, warnuserids_, misaccountname_, biinitdate_, bibalance_, allowsplit_ from AU_BANK_ACCOUNT
+    </sql>
+	
+    <select id="selectAuBankAccountList" parameterType="AuBankAccount" resultMap="AuBankAccountResult">
+		SELECT
+			c.id_,
+			c.accno_,
+			c.name_,
+			c.orgid_,
+			c.bankid_,
+			c.openbankname_,
+			c.parentmode_,
+			c.currencyid_,
+			c.areaid_,
+			c.accattributeid_,
+			c.accounttype_,
+			c.parentbankaccid_,
+			c.isopenwebbank_,
+			c.accstate_,
+			c.balance_,
+			c.initdate_,
+			c.remark_,
+			c.createby_,
+			c.createtime_,
+			c.lastupdateby_,
+			c.lastupdatetime_,
+			c.enable_,
+			c.warnuserids_,
+			c.misaccountname_,
+			c.biinitdate_,
+			c.bibalance_,
+			c.allowsplit_,
+			a.name_ org_name,
+			b.dict_label bank_name 
+		FROM
+			AU_BANK_ACCOUNT  c
+		  LEFT JOIN AU_ORG a on c.orgid_ = a.id_ 
+			Left JOIN sys_dict_data b on c.bankid_ = b.dict_value
+			where b.dict_type = 'audit_bank'
+            <if test="id != null "> and id_ = #{id}</if>
+             <if test="accno != null  and accno != '' "> and accno_ = #{accno}</if>
+             <if test="name != null  and name != '' "> and name_ = #{name}</if>
+             <if test="orgid != null "> and orgid_ = #{orgid}</if>
+             <if test="bankid != null "> and bankid_ = #{bankid}</if>
+             <if test="openbankname != null  and openbankname != '' "> and openbankname_ = #{openbankname}</if>
+             <if test="parentmode != null  and parentmode != '' "> and parentmode_ = #{parentmode}</if>
+             <if test="currencyid != null "> and currencyid_ = #{currencyid}</if>
+             <if test="areaid != null "> and areaid_ = #{areaid}</if>
+             <if test="accattributeid != null "> and accattributeid_ = #{accattributeid}</if>
+             <if test="accounttype != null  and accounttype != '' "> and accounttype_ = #{accounttype}</if>
+             <if test="parentbankaccid != null "> and parentbankaccid_ = #{parentbankaccid}</if>
+             <if test="isopenwebbank != null  and isopenwebbank != '' "> and isopenwebbank_ = #{isopenwebbank}</if>
+             <if test="accstate != null  and accstate != '' "> and accstate_ = #{accstate}</if>
+             <if test="balance != null "> and balance_ = #{balance}</if>
+             <if test="initdate != null "> and initdate_ = #{initdate}</if>
+             <if test="remark != null  and remark != '' "> and remark_ = #{remark}</if>
+             <if test="createby != null "> and createby_ = #{createby}</if>
+             <if test="createtime != null "> and createtime_ = #{createtime}</if>
+             <if test="lastupdateby != null "> and lastupdateby_ = #{lastupdateby}</if>
+             <if test="lastupdatetime != null "> and lastupdatetime_ = #{lastupdatetime}</if>
+             <if test="enable != null "> and enable_ = #{enable}</if>
+             <if test="warnuserids != null  and warnuserids != '' "> and warnuserids_ = #{warnuserids}</if>
+             <if test="misaccountname != null  and misaccountname != '' "> and misaccountname_ = #{misaccountname}</if>
+             <if test="biinitdate != null "> and biinitdate_ = #{biinitdate}</if>
+             <if test="bibalance != null "> and bibalance_ = #{bibalance}</if>
+             <if test="allowsplit != null "> and allowsplit_ = #{allowsplit}</if>
+    </select>
+    
+    <select id="selectAuBankAccountById" parameterType="Long" resultMap="AuBankAccountResult">
+        <include refid="selectAuBankAccountVo"/>
+        where id_ = #{id}
+    </select>
+        
+    <insert id="insertAuBankAccount" parameterType="AuBankAccount" keyProperty="id" >
+        insert into AU_BANK_ACCOUNT
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null  ">id_,</if>
+			<if test="accno != null  and accno != ''  ">accno_,</if>
+			<if test="name != null  and name != ''  ">name_,</if>
+			<if test="orgid != null  ">orgid_,</if>
+			<if test="bankid != null  ">bankid_,</if>
+			<if test="openbankname != null  and openbankname != ''  ">openbankname_,</if>
+			<if test="parentmode != null  and parentmode != ''  ">parentmode_,</if>
+			<if test="currencyid != null  ">currencyid_,</if>
+			<if test="areaid != null  ">areaid_,</if>
+			<if test="accattributeid != null  ">accattributeid_,</if>
+			<if test="accounttype != null  and accounttype != ''  ">accounttype_,</if>
+			<if test="parentbankaccid != null  ">parentbankaccid_,</if>
+			<if test="isopenwebbank != null  and isopenwebbank != ''  ">isopenwebbank_,</if>
+			<if test="accstate != null  and accstate != ''  ">accstate_,</if>
+			<if test="balance != null  ">balance_,</if>
+			<if test="initdate != null  ">initdate_,</if>
+			<if test="remark != null  and remark != ''  ">remark_,</if>
+			<if test="createby != null  ">createby_,</if>
+			<if test="createtime != null  ">createtime_,</if>
+			<if test="lastupdateby != null  ">lastupdateby_,</if>
+			<if test="lastupdatetime != null  ">lastupdatetime_,</if>
+			<if test="enable != null  ">enable_,</if>
+			<if test="warnuserids != null  and warnuserids != ''  ">warnuserids_,</if>
+			<if test="misaccountname != null  and misaccountname != ''  ">misaccountname_,</if>
+			<if test="biinitdate != null  ">biinitdate_,</if>
+			<if test="bibalance != null  ">bibalance_,</if>
+			<if test="allowsplit != null  ">allowsplit_,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null  ">#{id},</if>
+			<if test="accno != null  and accno != ''  ">#{accno},</if>
+			<if test="name != null  and name != ''  ">#{name},</if>
+			<if test="orgid != null  ">#{orgid},</if>
+			<if test="bankid != null  ">#{bankid},</if>
+			<if test="openbankname != null  and openbankname != ''  ">#{openbankname},</if>
+			<if test="parentmode != null  and parentmode != ''  ">#{parentmode},</if>
+			<if test="currencyid != null  ">#{currencyid},</if>
+			<if test="areaid != null  ">#{areaid},</if>
+			<if test="accattributeid != null  ">#{accattributeid},</if>
+			<if test="accounttype != null  and accounttype != ''  ">#{accounttype},</if>
+			<if test="parentbankaccid != null  ">#{parentbankaccid},</if>
+			<if test="isopenwebbank != null  and isopenwebbank != ''  ">#{isopenwebbank},</if>
+			<if test="accstate != null  and accstate != ''  ">#{accstate},</if>
+			<if test="balance != null  ">#{balance},</if>
+			<if test="initdate != null  ">#{initdate},</if>
+			<if test="remark != null  and remark != ''  ">#{remark},</if>
+			<if test="createby != null  ">#{createby},</if>
+			<if test="createtime != null  ">#{createtime},</if>
+			<if test="lastupdateby != null  ">#{lastupdateby},</if>
+			<if test="lastupdatetime != null  ">#{lastupdatetime},</if>
+			<if test="enable != null  ">#{enable},</if>
+			<if test="warnuserids != null  and warnuserids != ''  ">#{warnuserids},</if>
+			<if test="misaccountname != null  and misaccountname != ''  ">#{misaccountname},</if>
+			<if test="biinitdate != null  ">#{biinitdate},</if>
+			<if test="bibalance != null  ">#{bibalance},</if>
+			<if test="allowsplit != null  ">#{allowsplit},</if>
+         </trim>
+    </insert>
+	 
+    <update id="updateAuBankAccount" parameterType="AuBankAccount">
+        update AU_BANK_ACCOUNT
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="accno != null  and accno != ''  ">accno_ = #{accno},</if>
+            <if test="name != null  and name != ''  ">name_ = #{name},</if>
+            <if test="orgid != null  ">orgid_ = #{orgid},</if>
+            <if test="bankid != null  ">bankid_ = #{bankid},</if>
+            <if test="openbankname != null  and openbankname != ''  ">openbankname_ = #{openbankname},</if>
+            <if test="parentmode != null  and parentmode != ''  ">parentmode_ = #{parentmode},</if>
+            <if test="currencyid != null  ">currencyid_ = #{currencyid},</if>
+            <if test="areaid != null  ">areaid_ = #{areaid},</if>
+            <if test="accattributeid != null  ">accattributeid_ = #{accattributeid},</if>
+            <if test="accounttype != null  and accounttype != ''  ">accounttype_ = #{accounttype},</if>
+            <if test="parentbankaccid != null  ">parentbankaccid_ = #{parentbankaccid},</if>
+            <if test="isopenwebbank != null  and isopenwebbank != ''  ">isopenwebbank_ = #{isopenwebbank},</if>
+            <if test="accstate != null  and accstate != ''  ">accstate_ = #{accstate},</if>
+            <if test="balance != null  ">balance_ = #{balance},</if>
+            <if test="initdate != null  ">initdate_ = #{initdate},</if>
+            <if test="remark != null  and remark != ''  ">remark_ = #{remark},</if>
+            <if test="createby != null  ">createby_ = #{createby},</if>
+            <if test="createtime != null  ">createtime_ = #{createtime},</if>
+            <if test="lastupdateby != null  ">lastupdateby_ = #{lastupdateby},</if>
+            <if test="lastupdatetime != null  ">lastupdatetime_ = #{lastupdatetime},</if>
+            <if test="enable != null  ">enable_ = #{enable},</if>
+            <if test="warnuserids != null  and warnuserids != ''  ">warnuserids_ = #{warnuserids},</if>
+            <if test="misaccountname != null  and misaccountname != ''  ">misaccountname_ = #{misaccountname},</if>
+            <if test="biinitdate != null  ">biinitdate_ = #{biinitdate},</if>
+            <if test="bibalance != null  ">bibalance_ = #{bibalance},</if>
+            <if test="allowsplit != null  ">allowsplit_ = #{allowsplit},</if>
+        </trim>
+        where id_ = #{id}
+    </update>
+
+	<delete id="deleteAuBankAccountById" parameterType="Long">
+        delete from AU_BANK_ACCOUNT where id_ = #{id}
+    </delete>
+	
+    <delete id="deleteAuBankAccountByIds" parameterType="String">
+        delete from AU_BANK_ACCOUNT where id_ in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+</mapper>

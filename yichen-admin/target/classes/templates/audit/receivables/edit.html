@@ -1,0 +1,49 @@
+<!DOCTYPE HTML>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<meta charset="utf-8">
+<head th:include="include :: header"></head>
+<link th:href="@{/css/audit/receivables.css}" rel="stylesheet"/>
+<body class="white-bg">
+<div class="ibox-content modal-box">
+    <form id="registerForm">
+        <div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">店厅：</label>
+                <div class="layui-input-block flex-sp-center">
+                    <input type="text" name="dtNameSel" id="dtNameSel" class="layui-input form-control" th:value="${mainInfo.name}" readonly/>
+<!--
+                    <th:block th:if="${type eq '3'}">
+                       <i class="fa fa-search" id="searchDtBtn" aria-hidden="true" style="position: absolute;right: 0px;padding: 10px 5px;"></i>
+                    </th:block>-->
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">营业日期：</label>
+                <div class="layui-input-block layui-input-inline">
+                    <input type="text" name="yyDate"  class="layui-input form-control" th:value="${mainInfo.businessdate}" readonly/>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">小计：</label>
+                <div class="layui-input-block">
+                    <input type="number" id="sumMoney" name="sumMoney" class="layui-input form-control" th:value="${mainInfo.amount}"  value="0"  readonly />
+                </div>
+            </div>
+        </div>
+        <div style="padding-top: 10px">
+            <th:block th:if="${type eq '3'}">
+               <a href="javascript:void(0);" id="projectAddBtn"><i class="fa fa-plus-square-o project-add" aria-hidden="true" style="float:right"></i> </a>
+            </th:block>
+            <table id="outerSysRecordTable"></table>
+        </div>
+    </form>
+</div>
+<div th:include="include::footer"></div>
+<script th:inline="javascript">
+    var id = [[${id}]];
+    var type = [[${type}]];
+    var propsInfo=[[${propsInfo}]];
+    var projects=[[${projects}]];
+</script>
+<script th:src="@{/js/receivables/edit.js}"></script>
+

@@ -1,0 +1,32 @@
+<body class="white-bg">
+<div class="ibox-content modal-box">
+    <form id="registerForm">
+    <div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">店厅：</label>
+            <div class="layui-input-block flex-sp-center">
+                <input type="text" name="dtNameSel" id="dtNameSel" class="layui-input form-control" />
+                <i class="fa fa-search" id="searchDtBtn" aria-hidden="true" style="position: absolute;right: 0px;padding: 10px 5px;"></i>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">营业日期：</label>
+            <div class="layui-input-block layui-input-inline">
+                <input type="text" class="time-input layui-input form-control" id="yyDate" placeholder="请选择" name="yyDate" />
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">小计：</label>
+            <div class="layui-input-block">
+                <input type="number" id="sumMoney" name="sumMoney" class="layui-input form-control" value="0"  readonly />
+            </div>
+        </div>
+    </div>
+    <div style="padding-top: 10px;height: 200px">
+        <a href="javascript:void(0);" id="projectAddBtn"><i class="fa fa-plus-square-o project-add" aria-hidden="true" style="float:right"></i> </a>
+        <table id="outerSysRecordTable"></table>
+    </div>
+    </form>
+</div>
+<script th:src="@{/js/receivables/add.js}"></script>
+

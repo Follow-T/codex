@@ -1,0 +1,9 @@
+Manifest-Version: 1.0
+Implementation-Title: yichen-framework
+Implementation-Version: 3.2
+Built-By: followT
+Implementation-Vendor-Id: com.asiainfo
+Build-Jdk: 1.8.0_151
+Implementation-URL: http://www.yichen.vip/yichen-framework
+Created-By: Maven Integration for Eclipse
+

@@ -1,0 +1,31 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>com.asiainfo</groupId>
+		<artifactId>yichen</artifactId>
+		<version>3.2</version>
+	</parent>
+	<artifactId>yichen-audit</artifactId>
+
+	<description>
+          资金稽核业务模块
+  </description>
+
+	<dependencies>
+
+		<!-- Mysql驱动包 -->
+		<dependency>
+			<groupId>mysql</groupId>
+			<artifactId>mysql-connector-java</artifactId>
+		</dependency>
+
+		<!-- 通用工具 -->
+		<dependency>
+			<groupId>com.asiainfo</groupId>
+			<artifactId>yichen-common</artifactId>
+		</dependency>
+
+	</dependencies>
+
+</project>

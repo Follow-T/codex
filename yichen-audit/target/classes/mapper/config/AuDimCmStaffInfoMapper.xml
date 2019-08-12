@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.asiainfo.config.mapper.AuDimCmStaffInfoMapper">
+    
+    <resultMap type="AuDimCmStaffInfo" id="AuDimCmStaffInfoResult">
+        <result property="id"    column="id_"    />
+        <result property="staffid"    column="staffid_"    />
+        <result property="staffname"    column="staffname_"    />
+        <result property="staffcode"    column="staffcode_"    />
+        <result property="crmstfid"    column="crmstfid_"    />
+        <result property="regionname"    column="regionname_"    />
+        <result property="regionid"    column="regionid_"    />
+        <result property="state"    column="state_"    />
+        <result property="createby"    column="createby_"    />
+        <result property="createtime"    column="createtime_"    />
+        <result property="lastupdateby"    column="lastupdateby_"    />
+        <result property="lastupdatetime"    column="lastupdatetime_"    />
+        <result property="enable"    column="enable_"    />
+    </resultMap>
+	
+	<sql id="selectAuDimCmStaffInfoVo">
+        select id_, staffid_, staffname_, staffcode_, crmstfid_, regionname_, regionid_, state_, createby_, createtime_, lastupdateby_, lastupdatetime_, enable_ from AU_DIM_CM_STAFF_INFO
+    </sql>
+	
+    <select id="selectAuDimCmStaffInfoList" parameterType="AuDimCmStaffInfo" resultMap="AuDimCmStaffInfoResult">
+        <include refid="selectAuDimCmStaffInfoVo"/>
+        <where>  
+            <if test="id != null "> and id_ = #{id}</if>
+             <if test="staffid != null  and staffid != '' "> and staffid_ = #{staffid}</if>
+             <if test="staffname != null  and staffname != '' "> and staffname_ = #{staffname}</if>
+             <if test="staffcode != null  and staffcode != '' "> and staffcode_ = #{staffcode}</if>
+             <if test="crmstfid != null  and crmstfid != '' "> and crmstfid_ = #{crmstfid}</if>
+             <if test="regionname != null  and regionname != '' "> and regionname_ = #{regionname}</if>
+             <if test="regionid != null  and regionid != '' "> and regionid_ = #{regionid}</if>
+             <if test="state != null  and state != '' "> and state_ = #{state}</if>
+             <if test="createby != null "> and createby_ = #{createby}</if>
+             <if test="createtime != null "> and createtime_ = #{createtime}</if>
+             <if test="lastupdateby != null "> and lastupdateby_ = #{lastupdateby}</if>
+             <if test="lastupdatetime != null "> and lastupdatetime_ = #{lastupdatetime}</if>
+             <if test="enable != null "> and enable_ = #{enable}</if>
+         </where>
+    </select>
+    
+    <select id="selectAuDimCmStaffInfoById" parameterType="Long" resultMap="AuDimCmStaffInfoResult">
+        <include refid="selectAuDimCmStaffInfoVo"/>
+        where id_ = #{id}
+    </select>
+        
+    <insert id="insertAuDimCmStaffInfo" parameterType="AuDimCmStaffInfo">
+        insert into AU_DIM_CM_STAFF_INFO
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null  ">id_,</if>
+			<if test="staffid != null  and staffid != ''  ">staffid_,</if>
+			<if test="staffname != null  and staffname != ''  ">staffname_,</if>
+			<if test="staffcode != null  and staffcode != ''  ">staffcode_,</if>
+			<if test="crmstfid != null  and crmstfid != ''  ">crmstfid_,</if>
+			<if test="regionname != null  and regionname != ''  ">regionname_,</if>
+			<if test="regionid != null  and regionid != ''  ">regionid_,</if>
+			<if test="state != null  and state != ''  ">state_,</if>
+			<if test="createby != null  ">createby_,</if>
+			<if test="createtime != null  ">createtime_,</if>
+			<if test="lastupdateby != null  ">lastupdateby_,</if>
+			<if test="lastupdatetime != null  ">lastupdatetime_,</if>
+			<if test="enable != null  ">enable_,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null  ">#{id},</if>
+			<if test="staffid != null  and staffid != ''  ">#{staffid},</if>
+			<if test="staffname != null  and staffname != ''  ">#{staffname},</if>
+			<if test="staffcode != null  and staffcode != ''  ">#{staffcode},</if>
+			<if test="crmstfid != null  and crmstfid != ''  ">#{crmstfid},</if>
+			<if test="regionname != null  and regionname != ''  ">#{regionname},</if>
+			<if test="regionid != null  and regionid != ''  ">#{regionid},</if>
+			<if test="state != null  and state != ''  ">#{state},</if>
+			<if test="createby != null  ">#{createby},</if>
+			<if test="createtime != null  ">#{createtime},</if>
+			<if test="lastupdateby != null  ">#{lastupdateby},</if>
+			<if test="lastupdatetime != null  ">#{lastupdatetime},</if>
+			<if test="enable != null  ">#{enable},</if>
+         </trim>
+    </insert>
+	 
+    <update id="updateAuDimCmStaffInfo" parameterType="AuDimCmStaffInfo">
+        update AU_DIM_CM_STAFF_INFO
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="staffid != null  and staffid != ''  ">staffid_ = #{staffid},</if>
+            <if test="staffname != null  and staffname != ''  ">staffname_ = #{staffname},</if>
+            <if test="staffcode != null  and staffcode != ''  ">staffcode_ = #{staffcode},</if>
+            <if test="crmstfid != null  and crmstfid != ''  ">crmstfid_ = #{crmstfid},</if>
+            <if test="regionname != null  and regionname != ''  ">regionname_ = #{regionname},</if>
+            <if test="regionid != null  and regionid != ''  ">regionid_ = #{regionid},</if>
+            <if test="state != null  and state != ''  ">state_ = #{state},</if>
+            <if test="createby != null  ">createby_ = #{createby},</if>
+            <if test="createtime != null  ">createtime_ = #{createtime},</if>
+            <if test="lastupdateby != null  ">lastupdateby_ = #{lastupdateby},</if>
+            <if test="lastupdatetime != null  ">lastupdatetime_ = #{lastupdatetime},</if>
+            <if test="enable != null  ">enable_ = #{enable},</if>
+        </trim>
+        where id_ = #{id}
+    </update>
+
+	<delete id="deleteAuDimCmStaffInfoById" parameterType="Long">
+        delete from AU_DIM_CM_STAFF_INFO where id_ = #{id}
+    </delete>
+	
+    <delete id="deleteAuDimCmStaffInfoByIds" parameterType="String">
+        delete from AU_DIM_CM_STAFF_INFO where id_ in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+</mapper>

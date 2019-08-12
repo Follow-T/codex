@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.asiainfo.config.mapper.AuDimCmToCustInfoMapper">
+    
+    <resultMap type="AuDimCmToCustInfo" id="AuDimCmToCustInfoResult">
+        <result property="id"    column="id_"    />
+        <result property="orgid"    column="orgid_"    />
+        <result property="customermanager"    column="customermanager_"    />
+        <result property="bankaaccount"    column="bankaaccount_"    />
+        <result property="customerunitname"    column="customerunitname_"    />
+        <result property="customerbankaccount"    column="customerbankaccount_"    />
+        <result property="customeraccname"    column="customeraccname_"    />
+        <result property="pactno"    column="pactno_"    />
+        <result property="pactname"    column="pactname_"    />
+        <result property="firstuse"    column="firstuse_"    />
+        <result property="remark"    column="remark_"    />
+        <result property="createby"    column="createby_"    />
+        <result property="createtime"    column="createtime_"    />
+        <result property="lastupdateby"    column="lastupdateby_"    />
+        <result property="lastupdatetime"    column="lastupdatetime_"    />
+        <result property="enable"    column="enable_"    />
+        <result property="orgName"    column="org_name"    />
+    </resultMap>
+	
+	<sql id="selectAuDimCmToCustInfoVo">
+        select id_, orgid_, customermanager_, bankaaccount_, customerunitname_, customerbankaccount_, customeraccname_, pactno_, pactname_, firstuse_, remark_, createby_, createtime_, lastupdateby_, lastupdatetime_, enable_ from AU_DIM_CM_TO_CUST_INFO
+    </sql>
+	
+    <select id="selectAuDimCmToCustInfoList" parameterType="AuDimCmToCustInfo" resultMap="AuDimCmToCustInfoResult">
+		SELECT
+			b.name_ org_name,
+			a.*
+		FROM
+			AU_DIM_CM_TO_CUST_INFO a
+		LEFT JOIN AU_ORG b ON a.orgid_ = b.id_
+        <where>  
+            <if test="id != null "> and id_ = #{id}</if>
+             <if test="orgid != null "> and orgid_ = #{orgid}</if>
+             <if test="customermanager != null and customermanager != ''"> and customermanager_ = #{customermanager}</if>
+             <if test="bankaaccount != null and bankaaccount != ''"> and bankaaccount_ = #{bankaaccount}</if>
+             <if test="customerunitname != null  and customerunitname != '' "> and customerunitname_ = #{customerunitname}</if>
+             <if test="customerbankaccount != null  and customerbankaccount != '' "> and customerbankaccount_ = #{customerbankaccount}</if>
+             <if test="customeraccname != null  and customeraccname != '' "> and customeraccname_ = #{customeraccname}</if>
+             <if test="pactno != null "> and pactno_ = #{pactno}</if>
+             <if test="pactname != null  and pactname != '' "> and pactname_ = #{pactname}</if>
+             <if test="firstuse != null  and firstuse != '' "> and firstuse_ = #{firstuse}</if>
+             <if test="remark != null  and remark != '' "> and remark_ = #{remark}</if>
+             <if test="createby != null "> and createby_ = #{createby}</if>
+             <if test="createtime != null "> and createtime_ = #{createtime}</if>
+             <if test="lastupdateby != null "> and lastupdateby_ = #{lastupdateby}</if>
+             <if test="lastupdatetime != null "> and lastupdatetime_ = #{lastupdatetime}</if>
+             <if test="enable != null "> and enable_ = #{enable}</if>
+         </where>
+    </select>
+    
+    <select id="selectAuDimCmToCustInfoById" parameterType="Long" resultMap="AuDimCmToCustInfoResult">
+        <include refid="selectAuDimCmToCustInfoVo"/>
+        where id_ = #{id}
+    </select>
+        
+    <insert id="insertAuDimCmToCustInfo" parameterType="AuDimCmToCustInfo" keyProperty="id">
+        insert into AU_DIM_CM_TO_CUST_INFO
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null  ">id_,</if>
+			<if test="orgid != null  ">orgid_,</if>
+			<if test="customermanager != null  ">customermanager_,</if>
+			<if test="bankaaccount != null  ">bankaaccount_,</if>
+			<if test="customerunitname != null  and customerunitname != ''  ">customerunitname_,</if>
+			<if test="customerbankaccount != null  and customerbankaccount != ''  ">customerbankaccount_,</if>
+			<if test="customeraccname != null  and customeraccname != ''  ">customeraccname_,</if>
+			<if test="pactno != null  ">pactno_,</if>
+			<if test="pactname != null  and pactname != ''  ">pactname_,</if>
+			<if test="firstuse != null  and firstuse != ''  ">firstuse_,</if>
+			<if test="remark != null  and remark != ''  ">remark_,</if>
+			<if test="createby != null  ">createby_,</if>
+			<if test="createtime != null  ">createtime_,</if>
+			<if test="lastupdateby != null  ">lastupdateby_,</if>
+			<if test="lastupdatetime != null  ">lastupdatetime_,</if>
+			<if test="enable != null  ">enable_,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null  ">#{id},</if>
+			<if test="orgid != null  ">#{orgid},</if>
+			<if test="customermanager != null  ">#{customermanager},</if>
+			<if test="bankaaccount != null  ">#{bankaaccount},</if>
+			<if test="customerunitname != null  and customerunitname != ''  ">#{customerunitname},</if>
+			<if test="customerbankaccount != null  and customerbankaccount != ''  ">#{customerbankaccount},</if>
+			<if test="customeraccname != null  and customeraccname != ''  ">#{customeraccname},</if>
+			<if test="pactno != null  ">#{pactno},</if>
+			<if test="pactname != null  and pactname != ''  ">#{pactname},</if>
+			<if test="firstuse != null  and firstuse != ''  ">#{firstuse},</if>
+			<if test="remark != null  and remark != ''  ">#{remark},</if>
+			<if test="createby != null  ">#{createby},</if>
+			<if test="createtime != null  ">#{createtime},</if>
+			<if test="lastupdateby != null  ">#{lastupdateby},</if>
+			<if test="lastupdatetime != null  ">#{lastupdatetime},</if>
+			<if test="enable != null  ">#{enable},</if>
+         </trim>
+    </insert>
+	 
+    <update id="updateAuDimCmToCustInfo" parameterType="AuDimCmToCustInfo">
+        update AU_DIM_CM_TO_CUST_INFO
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="orgid != null  ">orgid_ = #{orgid},</if>
+            <if test="customermanager != null  ">customermanager_ = #{customermanager},</if>
+            <if test="bankaaccount != null  ">bankaaccount_ = #{bankaaccount},</if>
+            <if test="customerunitname != null  and customerunitname != ''  ">customerunitname_ = #{customerunitname},</if>
+            <if test="customerbankaccount != null  and customerbankaccount != ''  ">customerbankaccount_ = #{customerbankaccount},</if>
+            <if test="customeraccname != null  and customeraccname != ''  ">customeraccname_ = #{customeraccname},</if>
+            <if test="pactno != null  ">pactno_ = #{pactno},</if>
+            <if test="pactname != null  and pactname != ''  ">pactname_ = #{pactname},</if>
+            <if test="firstuse != null  and firstuse != ''  ">firstuse_ = #{firstuse},</if>
+            <if test="remark != null  and remark != ''  ">remark_ = #{remark},</if>
+            <if test="createby != null  ">createby_ = #{createby},</if>
+            <if test="createtime != null  ">createtime_ = #{createtime},</if>
+            <if test="lastupdateby != null  ">lastupdateby_ = #{lastupdateby},</if>
+            <if test="lastupdatetime != null  ">lastupdatetime_ = #{lastupdatetime},</if>
+            <if test="enable != null  ">enable_ = #{enable},</if>
+        </trim>
+        where id_ = #{id}
+    </update>
+
+	<delete id="deleteAuDimCmToCustInfoById" parameterType="Long">
+        delete from AU_DIM_CM_TO_CUST_INFO where id_ = #{id}
+    </delete>
+	
+    <delete id="deleteAuDimCmToCustInfoByIds" parameterType="String">
+        delete from AU_DIM_CM_TO_CUST_INFO where id_ in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+</mapper>

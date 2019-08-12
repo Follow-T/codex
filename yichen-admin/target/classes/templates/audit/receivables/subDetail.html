@@ -1,0 +1,94 @@
+<!DOCTYPE HTML>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<meta charset="utf-8">
+<head th:include="include :: header"></head>
+<link th:href="@{/css/audit/receivables.css}" rel="stylesheet"/>
+<style>
+    .layui-form-label{
+        min-width: 70px;
+        padding-right: 6px;
+    }
+    .search-bt{
+        border-top: 1px solid #dedede;
+        padding: 10px 0;
+    }
+    .title-icon{
+        background-color: #33a4f1;
+        padding: 5px 10px;
+        color:#fff;
+    }
+    .form-control{
+        width:160px;
+    }
+</style>
+<body class="white-bg">
+<div class="ibox-content modal-box">
+    <div class="clear">
+        <div class="layui-form-item">
+            <label class="layui-form-label">项目名称</label>
+            <div class="layui-input-block">
+                <input type="text" name="chnName" class="layui-input  form-control"  th:value="${sumInfo.itemname_}" readonly />
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">应收款</label>
+            <div class="layui-input-block">
+                <input type="text" name="dateNo" class="layui-input  form-control"  th:value="${sumInfo.amount_}" readonly />
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">收入总金额</label>
+            <div class="layui-input-block">
+                <input type="text" name="sum" class="layui-input  form-control"  th:value="${sumInfo.incomeamount_}" readonly />
+            </div>
+        </div>
+    </div>
+    <div class="clear">
+        <div class="layui-form-item">
+            <label class="layui-form-label">补退总金额</label>
+            <div class="layui-input-block">
+                <input type="text" name="sum" class="layui-input  form-control"  th:value="${sumInfo.backamount_}"  readonly />
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">流水号</label>
+            <div class="layui-input-block">
+                <input type="text" id="lsh" class="layui-input  form-control"/>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">营业员工号</label>
+            <div class="layui-input-block">
+                <input type="text" id="yyygh" class="layui-input  form-control"/>
+            </div>
+        </div>
+      </div>
+      <div class="clear flex-start-vcenter">
+        <div class="layui-form-item">
+            <label class="layui-form-label">渠道编码</label>
+            <div class="layui-input-block">
+                <input type="text" id="dtCodeInput" class="layui-input  form-control" />
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <a  class="btn btn-primary btn-rounded btn-sm" id="searchBtn" ><i class="fa fa-search"></i>&nbsp;搜索</a>
+        </div>
+    </div>
+    <div style="padding-top: 10px;">
+        <div class="title-icon">收入列表</div>
+        <table id="incomeTable"></table>
+    </div>
+    <div style="padding-top: 10px;">
+        <div  class="title-icon">补退列表</div>
+        <table id="outTable"></table>
+    </div>
+</div>
+<div th:include="include::footer"></div>
+<script th:inline="javascript">
+    var dateNo = [[${dateNo}]];
+    var projId = [[${projId}]];
+    var dtId = [[${dtId}]];
+</script>
+<script th:src="@{/js/receivables/subDetail.js}"></script>
+</body>
+</html>

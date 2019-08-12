@@ -1,0 +1,49 @@
+<!DOCTYPE HTML>
+<html  lang="zh" xmlns:th="http://www.thymeleaf.org">
+<meta charset="utf-8">
+<head th:include="include :: header"></head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal m" id="form-auDimPolyMchant-add">
+			<div class="form-group select-list">	
+				<label class="col-sm-3 control-label">机构名称：</label>
+				<div class="col-sm-8">
+					<select name="orgId"  th:with="type=${@dict.getType('audit_latn')}">
+						 <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+					</select>
+				</div>
+			</div>
+			<div class="form-group select-list">	
+				<label class="col-sm-3 control-label">聚合支付商户号：</label>
+				<div class="col-sm-8">
+					<input id="mchantId" name="mchantId" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group select-list">	
+				<label class="col-sm-3 control-label">银行结算账户：</label>
+				<div class="col-sm-8">
+					<input id="settlementBankAcct" name="settlementBankAcct" class="form-control" type="text">
+				</div>
+			</div>
+		</form>
+	</div>
+    <div th:include="include::footer"></div>
+    <script type="text/javascript">
+		var prefix = ctx + "config/auDimPolyMchant"
+		$("#form-auDimPolyMchant-add").validate({
+			rules:{
+				xxxx:{
+					required:true,
+				},
+			},
+			focusCleanup: true
+		});
+		
+		function submitHandler() {
+	        if ($.validate.form()) {
+	            $.operate.save(prefix + "/add", $('#form-auDimPolyMchant-add').serialize());
+	        }
+	    }
+	</script>
+</body>
+</html>

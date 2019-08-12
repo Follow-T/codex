@@ -1,0 +1,102 @@
+<!DOCTYPE HTML>
+<html  lang="zh" xmlns:th="http://www.thymeleaf.org">
+<meta charset="utf-8">
+<head th:include="include :: header"></head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal m" id="form-auBankAccount-add" th:object="${auBankAccount}">
+        <input type="hidden" name="orgid" th:field="*{orgid}"/>
+			<div class="form-group select-list">	
+				<label class="col-sm-2 control-label">账户号：</label>
+				<div class="col-sm-4">
+					<input id="accno" name="accno" class="form-control" type="text" required placeholder="请输入账号">
+				</div>
+				<label class="col-sm-2 control-label">账户名称：</label>
+				<div class="col-sm-4">
+					<input id="name" name="name" class="form-control" type="text" required placeholder="请输入账户名称">
+				</div>
+			</div>
+			<div class="form-group select-list">	
+				<label class="col-sm-2 control-label">开户行名称：</label>
+				<div class="col-sm-4">
+					<input id="openbankname" name="openbankname" class="form-control" type="text" required placeholder="请输入开户行名称">
+				</div>
+				<label class="col-sm-2 control-label">银行：</label>
+				<div class="col-sm-4">
+					<select name="bankid" th:with="type=${@dict.getType('audit_bank')}">
+						  <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+					</select>
+				</div>
+			</div>
+			<div class="form-group select-list">	
+				<label class="col-sm-2 control-label">初始化日期：</label>
+				<div class="col-sm-4">
+					<input id="initdate" class="time-input form-control" name="initdate" type="text">
+				</div>
+				<label class="col-sm-2 control-label">余额：</label>
+				<div class="col-sm-4">
+					<input id="balance" name="balance" class="form-control" type="text" required placeholder="请输入余额">
+				</div>
+			</div>
+			<div class="form-group select-list">	
+				<label class="col-sm-2 control-label">资金归集方式：</label>
+				<div class="col-sm-4">
+					<select name="parentmode" th:with="type=${@dict.getType('audit_parentmode')}">
+						<option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+					</select>
+				</div>
+				<label class="col-sm-2 control-label">币种：</label>
+				<div class="col-sm-4">
+				<select name="currencyid" th:with="type=${@dict.getType('audit_currency')}">
+						<option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+					</select>
+				</div>
+			</div>
+			<div class="form-group select-list">	
+				<label class="col-sm-2 control-label">账户性质 ：</label>
+				<div class="col-sm-4">
+				<select name="accattributeid" th:with="type=${@dict.getType('audit_accountAttr')}">
+						<option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+					</select>
+				</div>
+				<label class="col-sm-2 control-label">账户类型：</label>
+				<div class="col-sm-4">
+				<select name="accounttype" th:with="type=${@dict.getType('audit_bankaccount')}">
+						<option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+					</select>
+				</div>
+			</div>
+			<div class="form-group select-list">	
+				<label class="col-sm-2 control-label">账户状态：</label>
+				<div class="col-sm-4">
+					<select name="accstate" th:with="type=${@dict.getType('audit_account_status')}">
+							<option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+					</select>
+				</div>
+				<label class="col-sm-2 control-label">备注：</label>
+				<div class="col-sm-4">
+					<input id="remark" name="remark" class="form-control" type="text"/>
+				</div>
+			</div>
+		</form>
+	</div>
+    <div th:include="include::footer"></div>
+    <script type="text/javascript">
+		var prefix = ctx + "config/bankAccount"
+		$("#form-auBankAccount-add").validate({
+			rules:{
+				xxxx:{
+					required:true,
+				},
+			},
+			focusCleanup: true
+		});
+		
+		function submitHandler() {
+	        if ($.validate.form()) {
+	            $.operate.save(prefix + "/add", $('#form-auBankAccount-add').serialize());
+	        }
+	    }
+	</script>
+</body>
+</html>

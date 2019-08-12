@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org"
+	xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<meta charset="utf-8">
+<head th:include="include :: header"></head>
+<link th:href="@{/css/audit/receivables.css}" rel="stylesheet"/>
+<body class="gray-bg">
+	<div class="container-div ui-layout-center">
+		<div class="row">
+			<div class="col-sm-12 search-collapse">
+				<form id="receiveables-form">
+					<div class="select-list">
+						<ul>
+							<li>
+								店厅编码：<input type="text" name="dtCode" placeholder="请输入厅店编码"/>
+							</li>
+							<li>
+								店厅名称：<input type="text" name="dtName" placeholder="请输入厅店名称"/>
+							</li>
+							<li>
+								状态：
+								<select name="status" lay-filter="status" th:with="type=${@dict.getType('audit_checke_status')}">
+									<option value="">请选择</option>
+									<option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+								</select>
+							</li>
+							<li>
+								单位：<select name="orgId" th:with="type=${@dict.getType('sys_normal_disable')}">
+									<option value="">所有</option>
+									<!--<option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>  -->
+								</select>
+							</li>
+							<li class="select-time">
+								<label>日期： </label>
+								<input type="text" class="time-input" id="startTime" placeholder="开始时间" name="beginTime"/>
+								<span>至</span>
+								<input type="text" class="time-input" id="endTime" placeholder="结束时间" name="endTime"/>
+							</li>
+							<li>
+								<a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+							    <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+							</li>
+						</ul>
+					</div>
+				</form>
+			</div>
+
+			<div class="btn-group-sm" id="toolbar" role="group">
+				<a class="btn btn-success" id="registerBen" shiro:hasPermission="audit:receivables:add">
+					<i class="fa fa-plus"></i> 登记
+				</a>
+			</div>
+
+	        <div class="col-sm-12 select-table table-striped">
+			    <table id="bootstrap-table" data-mobile-responsive="true"></table>
+			</div>
+		</div>
+	</div>
+	<div th:include="include :: footer"></div>
+	<script th:inline="javascript">
+     var projects = [[${projects}]];
+	</script>
+	<script th:src="@{/js/receivables/receivables.js}"></script>
+</body>
+</html>
